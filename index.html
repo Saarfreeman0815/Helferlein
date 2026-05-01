@@ -301,6 +301,7 @@ input[type=text],input[type=time],input[type=date],textarea{
   <button class="tab" onclick="showTab('bilder')">🖼️ Bilder</button>
   <button class="tab" onclick="showTab('spiele')">🎮 Spiele</button>
   <button class="tab" onclick="showTab('uebersetzer')">🌍 Übersetzer</button>
+  <button class="tab" onclick="showTab('rezepte')">🍽️ Rezepte</button>
 
 </div>
 
@@ -414,7 +415,6 @@ input[type=text],input[type=time],input[type=date],textarea{
         <button onclick="showTab('radio')" class="t-btn">📻 Radio</button>
         <button onclick="showTab('spiele')" class="t-btn">🎮 Spiele</button>
         <button onclick="showTab('uebersetzer')" class="t-btn">🌍 Übersetzen</button>
-        <button onclick="window.open('rezepte.html')" class="t-btn">🍽️ Rezepte & Einkauf</button>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
         <button onclick="window.open('https://ko-fi.com/helferleinprojekt')" 
@@ -1005,6 +1005,18 @@ input[type=text],input[type=time],input[type=date],textarea{
   </div>
 </div>
 
+<!-- REZEPTE -->
+<div class="panel" id="p-rezepte">
+  <div style="display:flex;flex-direction:column;height:100%;">
+    <div style="padding:10px;background:var(--surface);border-bottom:1px solid var(--border);font-size:.72rem;color:var(--muted);">
+      Rezepte werden von GitHub geladen — Internet erforderlich
+    </div>
+    <iframe src="https://saarfreeman0815.github.io/helferlein/rezepte.html" 
+      style="flex:1;border:none;width:100%;height:100%;min-height:600px;"
+      allow="clipboard-write"></iframe>
+  </div>
+</div>
+
 <!-- LOADING -->
 <div id="loading"><div class="spinner"></div><div style="color:var(--muted);font-size:.75rem;letter-spacing:2px;margin-top:8px;">LADE...</div></div>
 
@@ -1099,7 +1111,7 @@ let currentRadio = null;
 // TABS
 // ================================================================
 const TABS = ['dashboard','reader','diktat','editor','notizen','todo','medi','termine',
-              'adressen','musik','radio','bilder','spiele','aquarium','lesezeichen','uebersetzer'];
+              'adressen','musik','radio','bilder','spiele','aquarium','lesezeichen','uebersetzer','rezepte'];
 
 function showTab(id) {
   TABS.forEach(t => {
