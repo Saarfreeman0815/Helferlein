@@ -414,6 +414,7 @@ input[type=text],input[type=time],input[type=date],textarea{
         <button onclick="showTab('radio')" class="t-btn">📻 Radio</button>
         <button onclick="showTab('spiele')" class="t-btn">🎮 Spiele</button>
         <button onclick="showTab('uebersetzer')" class="t-btn">🌍 Übersetzen</button>
+        <button onclick="window.open('rezepte.html')" class="t-btn">🍽️ Rezepte & Einkauf</button>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
         <button onclick="window.open('https://ko-fi.com/helferleinprojekt')" 
@@ -684,6 +685,11 @@ input[type=text],input[type=time],input[type=date],textarea{
   <div class="panel-row">
     <div class="sb">
       <button class="sb-btn active" onclick="showModal('termin-modal')" style="font-weight:700;">+ TERMIN</button>
+      <label class="sb-btn" style="cursor:pointer;display:block;text-align:left;">
+        📅 iCal importieren
+        <input type="file" accept=".ics" onchange="importIcal(this)" style="display:none;">
+      </label>
+      <button class="sb-btn" onclick="exportIcal()" style="color:var(--accent);">📤 Termine exportieren</button>
       <div class="sb-sec">ANSICHT</div>
       <button class="sb-btn" onclick="showKalender('monat')" id="kal-monat-btn">📅 Monatsansicht</button>
       <button class="sb-btn" onclick="showKalender('liste')" id="kal-liste-btn">📋 Listenansicht</button>
@@ -3290,6 +3296,97 @@ function importDaten(input) {
     } catch(err) { alert('Fehler beim Laden: ' + err.message); }
   };
   reader.readAsText(file);
+}
+
+
+// ================================================================
+// iCAL IMPORT / EXPORT
+// ================================================================
+function importIcal(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const text = e.target.result;
+      const lines = text.split('\n').map(l => l.trim());
+      const newTermine = [];
+      let current = null;
+      
+      lines.forEach(line => {
+        if (line.startsWith('BEGIN:VEVENT')) {
+          current = {};
+        } else if (line.startsWith('END:VEVENT') && current) {
+          if (current.date && current.name) {
+            newTermine.push({
+              id: Date.now() + Math.random(),
+              name: current.name,
+              date: current.date,
+              time: current.time || '',
+              note: current.note || ''
+            });
+          }
+          current = null;
+        } else if (current) {
+          if (line.startsWith('SUMMARY:')) {
+            current.name = line.replace('SUMMARY:', '').trim();
+          } else if (line.startsWith('DTSTART')) {
+            const val = line.split(':')[1]?.trim() || '';
+            if (val.length >= 8) {
+              current.date = val.slice(0,4) + '-' + val.slice(4,6) + '-' + val.slice(6,8);
+              if (val.length > 8) {
+                current.time = val.slice(9,11) + ':' + val.slice(11,13);
+              }
+            }
+          } else if (line.startsWith('DESCRIPTION:')) {
+            current.note = line.replace('DESCRIPTION:', '').trim();
+          }
+        }
+      });
+      
+      if (!newTermine.length) { alert('Keine Termine gefunden!'); return; }
+      termine = load('hf_termine', []);
+      termine = [...termine, ...newTermine];
+      termine.sort((a,b) => a.date.localeCompare(b.date));
+      save('hf_termine', termine);
+      renderKalender();
+      status('✓ ' + newTermine.length + ' Termine importiert!');
+      input.value = '';
+    } catch(err) {
+      alert('Fehler beim Import: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function exportIcal() {
+  termine = load('hf_termine', []);
+  if (!termine.length) { alert('Keine Termine zum Exportieren!'); return; }
+  
+  const NL = '\r\n';
+  let ical = 'BEGIN:VCALENDAR' + NL + 'VERSION:2.0' + NL + 'PRODID:-//Helferlein//DE' + NL;
+  
+  termine.forEach(t => {
+    const dateStr = t.date.replace(/-/g,'');
+    let dtstart = dateStr;
+    if (t.time) {
+      dtstart = dateStr + 'T' + t.time.replace(':','') + '00';
+    }
+    ical += 'BEGIN:VEVENT' + NL;
+    ical += 'SUMMARY:' + t.name + NL;
+    ical += 'DTSTART:' + dtstart + NL;
+    if (t.note) ical += 'DESCRIPTION:' + t.note + NL;
+    ical += 'END:VEVENT' + NL;
+  });
+  
+  ical += 'END:VCALENDAR';
+  
+  const blob = new Blob([ical], {type:'text/calendar'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'helferlein_termine.ics';
+  a.click();
+  status('✓ ' + termine.length + ' Termine exportiert!');
 }
 
 </script>
