@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Helferlein — Vorleser</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap');
+
+:root {
+  --bg: #0f0f17;
+  --surface: #1a1a28;
+  --surface2: #242438;
+  --accent: #c084fc;
+  --accent2: #818cf8;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --border: #2d2d45;
+  --green: #34d399;
+  --red: #f87171;
+  --gold: #fbbf24;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Lato', sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* HEADER */
+#header {
+  background: linear-gradient(135deg, #1a1a28, #0f0f17);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+#logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 1px;
+}
+
+#subtitle {
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* MAIN LAYOUT */
+#main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#tab-reader {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+/* LEFT SIDEBAR */
+#sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 12px;
+}
+
+/* DROP ZONE */
+#dropzone {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(192, 132, 252, 0.03);
+}
+#dropzone:hover, #dropzone.drag-over {
+  border-color: var(--accent);
+  background: rgba(192, 132, 252, 0.08);
+}
+#dropzone .dz-icon { font-size: 2.2rem; margin-bottom: 8px; }
+#dropzone .dz-text { font-size: 0.75rem; color: var(--muted); line-height: 1.6; }
+#dropzone .dz-formats { font-size: 0.65rem; color: var(--accent); margin-top: 6px; letter-spacing: 1px; }
+#file-input { display: none; }
+
+/* FILE INFO */
+#file-info {
+  display: none;
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.75rem;
+}
+#file-name { color: var(--accent); font-weight: 700; margin-bottom: 3px; word-break: break-all; }
+#file-meta { color: var(--muted); }
+
+/* VOICE SETTINGS */
+.settings-block {
+  background: var(--surface2);
+  border-radius: 10px;
+  padding: 12px;
+}
+.settings-title {
+  font-size: 0.6rem;
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+.setting-label { font-size: 0.72rem; color: var(--muted); flex-shrink: 0; }
+.setting-val { font-size: 0.72rem; color: var(--text); width: 32px; text-align: right; }
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  outline: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+}
+
+select {
+  width: 100%;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 0.72rem;
+  outline: none;
+  cursor: pointer;
+  margin-top: 4px;
+}
+select:focus { border-color: var(--accent); }
+
+/* PROGRESS */
+#progress-block {
+  background: var(--surface2);
+  border-radius: 10px;
+  padding: 12px;
+}
+.prog-label {
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+#prog-bar-bg {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+#prog-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent2), var(--accent));
+  width: 0%;
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+/* CONTENT AREA */
+#content-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* CONTROLS BAR */
+#controls {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.ctrl-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.ctrl-btn:hover { border-color: var(--accent); background: rgba(192,132,252,0.1); }
+.ctrl-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.ctrl-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+#btn-play { min-width: 110px; justify-content: center; }
+
+.divider { width: 1px; height: 28px; background: var(--border); margin: 0 4px; }
+
+#font-size-ctrl { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+#font-size-ctrl span { font-size: 0.7rem; color: var(--muted); }
+#font-size-display { font-size: 0.78rem; color: var(--accent); width: 28px; text-align: center; }
+
+/* CURRENT SENTENCE HIGHLIGHT */
+#current-sentence {
+  background: linear-gradient(135deg, rgba(192,132,252,0.08), rgba(129,140,248,0.05));
+  border-left: 3px solid var(--accent);
+  padding: 10px 20px;
+  font-size: 0.85rem;
+  color: var(--accent);
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* TEXT AREA */
+#text-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 30px 40px;
+  line-height: 1.9;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+#text-area:empty::before {
+  content: 'Datei hier ablegen oder links hochladen...';
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+#text-area p {
+  margin-bottom: 1.2em;
+}
+
+#text-area .sent {
+  border-radius: 3px;
+  transition: background 0.2s;
+  cursor: pointer;
+  padding: 1px 2px;
+}
+#text-area .sent:hover { background: rgba(192,132,252,0.08); }
+#text-area .sent.reading {
+  background: rgba(192,132,252,0.2);
+  color: #fff;
+}
+#text-area .sent.done {
+  color: var(--muted);
+}
+
+/* EMPTY STATE */
+#empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 16px;
+  color: var(--muted);
+}
+#empty-state .es-icon { font-size: 4rem; opacity: 0.3; }
+#empty-state .es-text { font-size: 0.9rem; text-align: center; line-height: 1.7; }
+#empty-state .es-formats {
+  font-size: 0.72rem;
+  color: var(--accent);
+  letter-spacing: 2px;
+  opacity: 0.7;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* STATUS */
+#status {
+  padding: 6px 20px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 1px;
+  display: flex;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+#status-text { color: var(--green); }
+
+/* LOADING */
+#loading {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15,15,23,0.85);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+}
+#loading.show { display: flex; }
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div>
+    <div id="logo">🎧 Helferlein</div>
+    <div id="subtitle">Vorleser · PDF · ePub · Text</div>
+  </div>
+</div>
+
+<div id="tab-bar">
+  <button class="tab-btn tab-active" id="btn-tab-reader" onclick="switchTab('reader')">📖 READER</button>
+  <button class="tab-btn" id="btn-tab-diktat" onclick="switchTab('diktat')">🎤 DIKTIEREN</button>
+  <button class="tab-btn" id="btn-tab-musik" onclick="switchTab('musik')">🎵 MUSIK</button>
+  <button class="tab-btn" id="btn-tab-notizen" onclick="switchTab('notizen')">📝 NOTIZEN</button>
+</div>
+
+<div id="main">
+  <!-- READER TAB -->
+  <div id="tab-reader" style="display:flex;flex:1;overflow:hidden;">
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+
+    <!-- DROP ZONE -->
+    <div id="dropzone" onclick="document.getElementById('file-input').click()">
+      <div class="dz-icon">📂</div>
+      <div class="dz-text">Datei hier ablegen<br>oder klicken zum Öffnen</div>
+      <div class="dz-formats">PDF · EPUB · TXT · MD</div>
+    </div>
+    <input type="file" id="file-input" accept=".pdf,.epub,.txt,.md,.text" onchange="handleFile(this.files[0])">
+
+    <!-- FILE INFO -->
+    <div id="file-info">
+      <div id="file-name">—</div>
+      <div id="file-meta">—</div>
+    </div>
+
+    <!-- VOICE SETTINGS -->
+    <div class="settings-block">
+      <div class="settings-title">🎙 Stimme</div>
+
+      <!-- Quick voice type buttons -->
+      <div style="display:flex;gap:5px;margin-bottom:8px;">
+        <button onclick="pickVoiceType('female')" id="vbtn-f"
+          style="flex:1;background:rgba(192,132,252,0.15);border:1px solid var(--accent);
+          color:var(--accent);font-size:0.65rem;padding:5px 3px;cursor:pointer;
+          border-radius:6px;letter-spacing:1px;transition:all .2s;">
+          👩 FRAU
+        </button>
+        <button onclick="pickVoiceType('male')" id="vbtn-m"
+          style="flex:1;background:var(--surface);border:1px solid var(--border);
+          color:var(--muted);font-size:0.65rem;padding:5px 3px;cursor:pointer;
+          border-radius:6px;letter-spacing:1px;transition:all .2s;">
+          👨 MANN
+        </button>
+        <button onclick="pickVoiceType('all')" id="vbtn-a"
+          style="flex:1;background:var(--surface);border:1px solid var(--border);
+          color:var(--muted);font-size:0.65rem;padding:5px 3px;cursor:pointer;
+          border-radius:6px;letter-spacing:1px;transition:all .2s;">
+          🎭 ALLE
+        </button>
+      </div>
+
+      <select id="voice-select" onchange="setVoice()"></select>
+      <div style="margin-top:5px;font-size:0.6rem;color:var(--muted);" id="voice-hint">
+        💡 Tipp: Microsoft Katja (Edge) = beste deutsche Frauenstimme
+      </div>
+      <div style="margin-top:10px;">
+        <div class="setting-row">
+          <span class="setting-label">Geschwindigkeit</span>
+          <span class="setting-val" id="rate-val">1.0×</span>
+        </div>
+        <input type="range" id="rate-slider" min="0.5" max="2" step="0.1" value="1"
+          oninput="document.getElementById('rate-val').textContent=parseFloat(this.value).toFixed(1)+'×'">
+      </div>
+      <div style="margin-top:8px;">
+        <div class="setting-row">
+          <span class="setting-label">Tonhöhe</span>
+          <span class="setting-val" id="pitch-val">1.0</span>
+        </div>
+        <input type="range" id="pitch-slider" min="0.5" max="2" step="0.1" value="1"
+          oninput="document.getElementById('pitch-val').textContent=parseFloat(this.value).toFixed(1)">
+      </div>
+      <div style="margin-top:8px;">
+        <div class="setting-row">
+          <span class="setting-label">Lautstärke</span>
+          <span class="setting-val" id="vol-val">100%</span>
+        </div>
+        <input type="range" id="vol-slider" min="0" max="1" step="0.05" value="1"
+          oninput="document.getElementById('vol-val').textContent=Math.round(this.value*100)+'%'">
+      </div>
+    </div>
+
+    <!-- PROGRESS -->
+    <div id="progress-block">
+      <div class="prog-label">
+        <span>FORTSCHRITT</span>
+        <span id="prog-pct">0%</span>
+      </div>
+      <div id="prog-bar-bg"><div id="prog-bar"></div></div>
+      <div style="margin-top:6px;font-size:0.65rem;color:var(--muted);" id="prog-info">Kein Dokument geladen</div>
+    </div>
+
+    <!-- LESEZEICHEN -->
+    <div class="settings-block" id="bookmark-block">
+      <div class="settings-title">🔖 Lesezeichen</div>
+      <button onclick="addBookmark()" style="width:100%;background:var(--accent);border:none;color:white;
+        font-size:0.68rem;padding:6px;cursor:pointer;border-radius:4px;margin-bottom:6px;letter-spacing:1px;">
+        + LESEZEICHEN SETZEN
+      </button>
+      <div id="bookmark-list" style="display:flex;flex-direction:column;gap:3px;max-height:120px;overflow-y:auto;"></div>
+    </div>
+
+    <!-- NOTIZEN -->
+    <div class="settings-block">
+      <div class="settings-title">📝 Notizen</div>
+      <textarea id="notes-area" placeholder="Notizen zum Buch..."
+        style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);
+        border-radius:4px;padding:6px;font-size:0.72rem;line-height:1.5;resize:vertical;
+        min-height:70px;font-family:'Lato',sans-serif;"></textarea>
+      <div style="display:flex;gap:4px;margin-top:4px;">
+        <button onclick="saveNotes()" style="flex:1;background:var(--surface2);border:1px solid var(--border);
+          color:var(--muted);font-size:0.65rem;padding:4px;cursor:pointer;border-radius:3px;">💾 Speichern</button>
+        <button onclick="exportNotes()" style="flex:1;background:var(--surface2);border:1px solid var(--border);
+          color:var(--muted);font-size:0.65rem;padding:4px;cursor:pointer;border-radius:3px;">📤 Export</button>
+      </div>
+    </div>
+
+    <!-- MUSIK PLAYER -->
+    <div class="settings-block">
+      <div class="settings-title">🎵 Musik</div>
+      <input type="file" id="music-input" accept=".mp3,.wav,.ogg,.m4a,.flac" multiple
+        style="display:none" onchange="loadMusic(this.files)">
+      <button onclick="document.getElementById('music-input').click()"
+        style="width:100%;background:var(--surface2);border:1px solid var(--border);
+        color:var(--muted);font-size:0.68rem;padding:6px;cursor:pointer;border-radius:4px;margin-bottom:6px;">
+        📂 Musik laden
+      </button>
+      <div id="music-title" style="font-size:0.65rem;color:var(--accent);margin-bottom:6px;
+        white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Kein Titel</div>
+      <div style="display:flex;gap:4px;margin-bottom:6px;justify-content:center;">
+        <button onclick="musicPrev()" style="background:var(--surface2);border:1px solid var(--border);
+          color:var(--text);padding:5px 10px;cursor:pointer;border-radius:4px;font-size:0.8rem;">⏮</button>
+        <button id="music-play-btn" onclick="toggleMusic()"
+          style="background:var(--accent);border:none;color:white;padding:5px 16px;
+          cursor:pointer;border-radius:4px;font-size:0.8rem;font-weight:bold;">▶</button>
+        <button onclick="musicNext()" style="background:var(--surface2);border:1px solid var(--border);
+          color:var(--text);padding:5px 10px;cursor:pointer;border-radius:4px;font-size:0.8rem;">⏭</button>
+      </div>
+      <input type="range" id="music-vol" min="0" max="1" step="0.05" value="0.5"
+        oninput="setMusicVol(this.value)" style="width:100%;">
+      <div style="font-size:0.6rem;color:var(--muted);text-align:center;margin-top:2px;">🔈 Lautstärke 🔊</div>
+      <audio id="music-player" onended="musicNext()"></audio>
+    </div>
+
+  </div>
+  <div id="content-wrap">
+
+    <!-- CONTROLS -->
+    <div id="controls">
+      <button class="ctrl-btn active" id="btn-play" onclick="togglePlay()" disabled>
+        <span id="play-icon">▶</span> <span id="play-label">VORLESEN</span>
+      </button>
+
+      <div class="divider"></div>
+
+      <button class="ctrl-btn" id="btn-prev" onclick="prevSentence()" disabled title="Vorheriger Satz">⏮</button>
+      <button class="ctrl-btn" id="btn-next" onclick="nextSentence()" disabled title="Nächster Satz">⏭</button>
+
+      <div class="divider"></div>
+
+      <button class="ctrl-btn" onclick="stopReading()" id="btn-stop" disabled>⏹ STOPP</button>
+
+      <div class="divider"></div>
+
+      <button class="ctrl-btn" onclick="copyText()" id="btn-copy" disabled>📋 KOPIEREN</button>
+      <button class="ctrl-btn" onclick="clearAll()" id="btn-clear" disabled>🗑 LEEREN</button>
+
+      <div class="divider" style="margin-left:auto;"></div>
+
+      <div id="font-size-ctrl">
+        <span>SCHRIFT</span>
+        <button class="ctrl-btn" onclick="changeFontSize(-1)" style="padding:6px 10px;">A−</button>
+        <span id="font-size-display">16</span>
+        <button class="ctrl-btn" onclick="changeFontSize(1)" style="padding:6px 10px;">A+</button>
+      </div>
+    </div>
+
+    <!-- CURRENT SENTENCE -->
+    <div id="current-sentence">Lade eine Datei um zu beginnen...</div>
+
+    <!-- TEXT -->
+    <div id="text-area">
+      <div id="empty-state">
+        <div class="es-icon">📖</div>
+        <div class="es-text">Kein Dokument geladen.<br>Datei links ablegen oder hochladen.</div>
+        <div class="es-formats">PDF · EPUB · TXT · MD</div>
+      </div>
+    </div>
+
+    <!-- STATUS -->
+    <div id="status">
+      <span id="status-text">Bereit</span>
+      <span id="word-count"></span>
+    </div>
+
+  </div>
+  <!-- END tab-reader -->
+  </div>
+
+  <!-- DIKTAT TAB -->
+  <div id="tab-diktat" style="display:none;flex:1;overflow:hidden;">
+    <div id="diktat-left">
+      <button id="diktat-btn" onclick="toggleDiktat()">🎤 DIKTIEREN</button>
+      <div id="diktat-status">Bereit</div>
+
+      <div class="dik-sec">SPRACHE</div>
+      <select id="diktat-lang" onchange="dictLang=this.value">
+        <option value="de-DE">🇩🇪 Deutsch (Deutschland)</option>
+        <option value="de-AT">🇦🇹 Deutsch (Österreich)</option>
+        <option value="de-CH">🇨🇭 Deutsch (Schweiz)</option>
+        <option value="en-US">🇺🇸 English (US)</option>
+        <option value="en-GB">🇬🇧 English (UK)</option>
+        <option value="en-AU">🇦🇺 English (Australia)</option>
+        <option value="fr-FR">🇫🇷 Français</option>
+        <option value="es-ES">🇪🇸 Español</option>
+        <option value="it-IT">🇮🇹 Italiano</option>
+        <option value="tr-TR">🇹🇷 Türkçe</option>
+      </select>
+
+      <div class="dik-sec">AKTIONEN</div>
+      <button class="dik-btn" onclick="diktatVorlesen()">▶ Vorlesen lassen</button>
+      <button class="dik-btn" onclick="diktatSpeichern('txt')">💾 Als TXT speichern</button>
+      <button class="dik-btn" onclick="diktatSpeichern('pdf')">📄 Als PDF speichern</button>
+      <button class="dik-btn" onclick="diktatSpeichern('html')">🌐 Als HTML speichern</button>
+      <button class="dik-btn" onclick="diktatDrucken()">🖨️ Drucken / PDF via Browser</button>
+
+      <div style="margin-top:auto;font-size:0.6rem;color:#444;line-height:1.6;">
+        Sprich deutlich und mach kurze Pausen zwischen Sätzen.<br><br>
+        Funktioniert nur in Chrome.
+      </div>
+    </div>
+    <div id="diktat-right">
+      <div id="diktat-interim"></div>
+      <div id="diktat-text" contenteditable="true" spellcheck="true"></div>
+    </div>
+  </div>
+
+</div>
+<!-- END main -->
+
+<!-- MUSIK TAB -->
+<div id="tab-musik" style="display:none;flex:1;overflow:hidden;flex-direction:row;">
+  <div style="width:200px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);padding:12px;display:flex;flex-direction:column;gap:8px;">
+    <button onclick="document.getElementById('mfi').click()" style="background:var(--accent);border:none;color:#fff;font-size:.8rem;font-weight:700;padding:10px;cursor:pointer;border-radius:4px;letter-spacing:1px;">🎵 MUSIK LADEN</button>
+    <input type="file" id="mfi" style="display:none" accept="audio/*" multiple onchange="loadMusicFiles(this.files)">
+    <button onclick="clearMusicList()" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-size:.7rem;padding:7px;cursor:pointer;border-radius:4px;">🗑 Liste leeren</button>
+    <div style="font-size:.58rem;color:var(--accent);letter-spacing:2px;border-bottom:1px solid var(--border);padding-bottom:4px;margin-top:8px;">OPTIONEN</div>
+    <label style="display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--muted);cursor:pointer;"><input type="checkbox" id="m-shuffle" style="accent-color:var(--accent);"> Zufällig</label>
+    <label style="display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--muted);cursor:pointer;"><input type="checkbox" id="m-repeat" style="accent-color:var(--accent);"> Wiederholen</label>
+    <div style="margin-top:auto;font-size:.6rem;color:#444;line-height:1.6;">MP3, WAV, OGG<br>Läuft im Hintergrund<br>während du liest.</div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+    <div id="mlist" style="flex:1;overflow-y:auto;padding:8px;">
+      <div style="text-align:center;padding:40px;color:var(--muted);"><div style="font-size:3rem;opacity:.3;">🎵</div><div style="margin-top:10px;">Musik laden um zu beginnen</div></div>
+    </div>
+    <div style="background:var(--surface);border-top:1px solid var(--border);padding:10px;">
+      <div id="mnow" style="font-size:.72rem;color:var(--accent);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Kein Titel</div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button onclick="mPrev()" style="background:transparent;border:none;color:var(--text);font-size:1.1rem;cursor:pointer;">⏮</button>
+        <button id="mpbtn" onclick="mToggle()" style="background:transparent;border:none;color:var(--text);font-size:1.4rem;cursor:pointer;">▶</button>
+        <button onclick="mNext()" style="background:transparent;border:none;color:var(--text);font-size:1.1rem;cursor:pointer;">⏭</button>
+        <input type="range" id="mprog" value="0" style="flex:1;accent-color:var(--accent);cursor:pointer;" oninput="mSeek(this.value)">
+        <span id="mtime" style="font-size:.62rem;color:var(--muted);min-width:80px;text-align:center;">0:00 / 0:00</span>
+        <span style="font-size:.65rem;color:var(--muted);">🔊</span>
+        <input type="range" id="mvol" min="0" max="1" step="0.05" value="0.7" style="width:70px;accent-color:var(--accent);" oninput="mSetVol(this.value)">
+      </div>
+    </div>
+    <audio id="maudio" onended="mEnded()" ontimeupdate="mUpdate()" onloadedmetadata="mUpdate()"></audio>
+  </div>
+</div>
+
+<!-- NOTIZEN TAB -->
+<div id="tab-notizen" style="display:none;flex:1;overflow:hidden;flex-direction:row;">
+  <div style="width:200px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);padding:12px;display:flex;flex-direction:column;gap:6px;overflow:hidden;">
+    <button onclick="newNote()" style="background:var(--accent);border:none;color:#fff;font-size:.8rem;font-weight:700;padding:10px;cursor:pointer;border-radius:4px;letter-spacing:1px;">✏️ NEUE NOTIZ</button>
+    <div style="font-size:.58rem;color:var(--accent);letter-spacing:2px;border-bottom:1px solid var(--border);padding-bottom:4px;margin-top:4px;">MEINE NOTIZEN</div>
+    <div id="note-list" style="flex:1;overflow-y:auto;"></div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;padding:14px;gap:8px;overflow:hidden;">
+    <input id="note-title-inp" placeholder="Titel..." style="background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:.9rem;padding:8px 12px;border-radius:4px;outline:none;" oninput="autosaveNote()">
+    <textarea id="note-body-inp" placeholder="Notiz hier eingeben..." style="flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:.85rem;padding:12px;border-radius:4px;resize:none;outline:none;font-family:Lato,sans-serif;line-height:1.7;" oninput="autosaveNote()"></textarea>
+    <div style="display:flex;gap:6px;">
+      <button onclick="exportNoteAs('txt')" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:.7rem;padding:6px 12px;cursor:pointer;border-radius:4px;">💾 TXT</button>
+      <button onclick="exportNoteAs('pdf')" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:.7rem;padding:6px 12px;cursor:pointer;border-radius:4px;">📄 PDF</button>
+      <button onclick="deleteCurrentNote()" style="background:var(--surface2);border:1px solid var(--border);color:var(--red);font-size:.7rem;padding:6px 12px;cursor:pointer;border-radius:4px;margin-left:auto;">🗑 Löschen</button>
+    </div>
+    <div id="note-save-status" style="font-size:.62rem;color:var(--green);"></div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div id="loading">
+  <div class="spinner"></div>
+  <div style="color:var(--muted);font-size:0.8rem;letter-spacing:2px;">LADE DATEI...</div>
+</div>
+
+<script>
+// ================================================================
+// STATE
+// ================================================================
+let sentences    = [];
+let currentIdx   = 0;
+let isPlaying    = false;
+let synth        = window.speechSynthesis;
+let voices       = [];
+let selectedVoice = null;
+let fontSize     = 16;
+let fullText     = '';
+
+// ================================================================
+// VOICES
+// ================================================================
+let allVoices = [];
+let currentVoiceType = 'female';
+
+// Heuristic: detect gender from voice name
+function guessGender(voice) {
+  const name = voice.name.toLowerCase();
+  const femaleHints = ['female','woman','girl','katja','hedda','helena','anna','laura','petra',
+    'sabine','steffi','sophie','marie','julia','lisa','eva','maria','sara','sarah','emma',
+    'amy','zira','linda','susan','karen','victoria','samantha','moira','tessa','fiona',
+    'nora','ioana','paulina','klaudia','elsa','alice','amelie','lea'];
+  const maleHints   = ['male','man','guy','stefan','hans','markus','michael','david','thomas',
+    'peter','george','daniel','james','alex','paul','richard','oliver','jack','harry'];
+  if (femaleHints.some(h => name.includes(h))) return 'female';
+  if (maleHints.some(h => name.includes(h)))   return 'male';
+  return 'unknown';
+}
+
+function loadVoices() {
+  allVoices = synth.getVoices();
+  if (allVoices.length === 0) return;
+  renderVoiceList(currentVoiceType);
+}
+
+function renderVoiceList(type) {
+  currentVoiceType = type;
+  const sel = document.getElementById('voice-select');
+  sel.innerHTML = '';
+
+  // Filter by language first (German preferred)
+  const german = allVoices.filter(v => v.lang.startsWith('de'));
+  const other  = allVoices.filter(v => !v.lang.startsWith('de'));
+  let pool = [...german, ...other];
+
+  // Filter by gender if needed
+  if (type === 'female') {
+    const f = pool.filter(v => guessGender(v) === 'female');
+    if (f.length > 0) pool = f;
+  } else if (type === 'male') {
+    const m = pool.filter(v => guessGender(v) === 'male');
+    if (m.length > 0) pool = m;
+  }
+
+  // Update buttons
+  ['female','male','all'].forEach(t => {
+    const id = 'vbtn-' + t[0];
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    if (t === type) {
+      btn.style.background = 'rgba(192,132,252,0.15)';
+      btn.style.borderColor = 'var(--accent)';
+      btn.style.color = 'var(--accent)';
+    } else {
+      btn.style.background = 'var(--surface)';
+      btn.style.borderColor = 'var(--border)';
+      btn.style.color = 'var(--muted)';
+    }
+  });
+
+  pool.forEach(v => {
+    const opt = document.createElement('option');
+    opt.value = allVoices.indexOf(v);
+    const flag   = v.lang.startsWith('de') ? '🇩🇪' : '🌐';
+    const gender = guessGender(v) === 'female' ? '👩' : guessGender(v) === 'male' ? '👨' : '🎭';
+    opt.textContent = `${flag}${gender} ${v.name}`;
+    sel.appendChild(opt);
+  });
+
+  // Auto-select: prefer Microsoft Katja or first German female
+  const katja = pool.find(v => v.name.toLowerCase().includes('katja'));
+  const first = katja || pool[0];
+  if (first) {
+    selectedVoice = first;
+    sel.value = allVoices.indexOf(first);
+    // Show hint
+    const hint = document.getElementById('voice-hint');
+    if (katja) {
+      hint.textContent = '✨ Microsoft Katja aktiv — beste Wahl!';
+      hint.style.color = 'var(--green)';
+    } else if (german.length > 0) {
+      hint.textContent = '💡 Für beste Qualität: Edge Browser nutzen';
+      hint.style.color = 'var(--muted)';
+    }
+  }
+}
+
+function pickVoiceType(type) {
+  renderVoiceList(type);
+}
+
+function setVoice() {
+  const sel = document.getElementById('voice-select');
+  const idx = parseInt(sel.value);
+  selectedVoice = allVoices[idx] || allVoices[0];
+  const hint = document.getElementById('voice-hint');
+  hint.textContent = '🎙 ' + (selectedVoice?.name || 'Unbekannt');
+  hint.style.color = 'var(--accent)';
+}
+
+synth.onvoiceschanged = loadVoices;
+loadVoices();
+
+// ================================================================
+// FILE HANDLING
+// ================================================================
+const dropzone = document.getElementById('dropzone');
+
+dropzone.addEventListener('dragover', e => {
+  e.preventDefault();
+  dropzone.classList.add('drag-over');
+});
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag-over'));
+dropzone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropzone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) handleFile(file);
+});
+
+async function handleFile(file) {
+  if (!file) return;
+  showLoading(true);
+
+  try {
+    const ext = file.name.split('.').pop().toLowerCase();
+    let text = '';
+
+    if (ext === 'txt' || ext === 'md' || ext === 'text') {
+      text = await readAsText(file);
+    } else if (ext === 'pdf') {
+      text = await readPDF(file);
+    } else if (ext === 'epub') {
+      text = await readEPUB(file);
+    } else {
+      alert('Format nicht unterstützt. Bitte PDF, EPUB, TXT oder MD.');
+      showLoading(false);
+      return;
+    }
+
+    if (!text || text.trim().length < 10) {
+      alert('Konnte keinen Text aus der Datei lesen.');
+      showLoading(false);
+      return;
+    }
+
+    fullText = text;
+    displayText(text, file.name, file.size);
+  } catch(e) {
+    console.error(e);
+    alert('Fehler beim Lesen der Datei: ' + e.message);
+  }
+
+  showLoading(false);
+}
+
+function readAsText(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = e => res(e.target.result);
+    r.onerror = rej;
+    r.readAsText(file, 'UTF-8');
+  });
+}
+
+async function readPDF(file) {
+  // Use PDF.js from CDN
+  if (!window.pdfjsLib) {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+
+  const ab = await file.arrayBuffer();
+  const pdf = await window.pdfjsLib.getDocument({ data: ab }).promise;
+  let text = '';
+
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    const pageText = content.items.map(item => item.str).join(' ');
+    text += pageText + '\n\n';
+  }
+  return text;
+}
+
+async function readEPUB(file) {
+  // Basic EPUB reader: unzip and extract text from HTML files
+  if (!window.JSZip) {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+  }
+
+  const ab = await file.arrayBuffer();
+  const zip = await JSZip.loadAsync(ab);
+  let text = '';
+
+  // Find content files
+  const htmlFiles = [];
+  zip.forEach((path, zipEntry) => {
+    if (!zipEntry.dir && (path.endsWith('.html') || path.endsWith('.xhtml') || path.endsWith('.htm'))) {
+      if (!path.includes('toc') && !path.includes('nav')) {
+        htmlFiles.push(zipEntry);
+      }
+    }
+  });
+
+  for (const entry of htmlFiles.slice(0, 50)) {
+    const html = await entry.async('text');
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    // Remove scripts and styles
+    doc.querySelectorAll('script,style').forEach(el => el.remove());
+    text += doc.body?.innerText || doc.body?.textContent || '';
+    text += '\n\n';
+  }
+  return text;
+}
+
+function loadScript(src) {
+  return new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = src; s.onload = res; s.onerror = rej;
+    document.head.appendChild(s);
+  });
+}
+
+// ================================================================
+// DISPLAY TEXT
+// ================================================================
+function displayText(text, filename, filesize) {
+  stopReading();
+
+  // Split into sentences
+  const raw = text
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  // Split by sentence endings
+  const sentenceRegex = /[^.!?…]+[.!?…]+[\s\n]*/g;
+  const found = raw.match(sentenceRegex) || [];
+
+  // If too few sentences, split by newlines
+  if (found.length < 3) {
+    sentences = raw.split('\n').filter(s => s.trim().length > 0);
+  } else {
+    sentences = found.map(s => s.trim()).filter(s => s.length > 0);
+  }
+
+  currentIdx = 0;
+
+  // Render
+  const ta = document.getElementById('text-area');
+  ta.innerHTML = '';
+
+  // Group sentences into paragraphs (every 4 sentences = 1 paragraph)
+  const groupSize = 4;
+  for (let i = 0; i < sentences.length; i += groupSize) {
+    const p = document.createElement('p');
+    for (let j = i; j < Math.min(i + groupSize, sentences.length); j++) {
+      const span = document.createElement('span');
+      span.className = 'sent';
+      span.dataset.idx = j;
+      span.textContent = sentences[j] + ' ';
+      span.onclick = () => jumpTo(j);
+      p.appendChild(span);
+    }
+    ta.appendChild(p);
+  }
+
+  // File info
+  document.getElementById('file-info').style.display = 'block';
+  document.getElementById('file-name').textContent = filename;
+  document.getElementById('file-meta').textContent =
+    `${sentences.length} Sätze · ${Math.round(filesize/1024)} KB`;
+  document.getElementById('word-count').textContent =
+    `${raw.split(/\s+/).length.toLocaleString()} Wörter`;
+  document.getElementById('prog-info').textContent =
+    `0 / ${sentences.length} Sätze`;
+  document.getElementById('current-sentence').textContent =
+    sentences[0] || '...';
+
+  loadNotes(filename);
+
+  // Enable buttons
+  ['btn-play','btn-prev','btn-next','btn-stop','btn-copy','btn-clear'].forEach(id => {
+    document.getElementById(id).disabled = false;
+  });
+
+  updateProgress();
+  setStatus('Dokument geladen — bereit zum Vorlesen');
+}
+
+// ================================================================
+// PLAYBACK
+// ================================================================
+function togglePlay() {
+  if (sentences.length === 0) return;
+  if (isPlaying) {
+    pauseReading();
+  } else {
+    startReading();
+  }
+}
+
+function startReading() {
+  if (sentences.length === 0) return;
+  isPlaying = true;
+  updatePlayBtn();
+  readNext();
+}
+
+function readNext() {
+  if (!isPlaying || currentIdx >= sentences.length) {
+    if (currentIdx >= sentences.length) {
+      isPlaying = false;
+      updatePlayBtn();
+      setStatus('Vorlesen abgeschlossen ✓');
+      document.getElementById('current-sentence').textContent = '✓ Fertig!';
+    }
+    return;
+  }
+
+  const sentence = sentences[currentIdx];
+  highlightSentence(currentIdx);
+
+  const utt = new SpeechSynthesisUtterance(sentence);
+  utt.voice  = selectedVoice;
+  utt.rate   = parseFloat(document.getElementById('rate-slider').value);
+  utt.pitch  = parseFloat(document.getElementById('pitch-slider').value);
+  utt.volume = parseFloat(document.getElementById('vol-slider').value);
+
+  utt.onend = () => {
+    if (isPlaying) {
+      currentIdx++;
+      updateProgress();
+      readNext();
+    }
+  };
+
+  utt.onerror = (e) => {
+    if (e.error !== 'interrupted') {
+      console.error('TTS Error:', e);
+      currentIdx++;
+      if (isPlaying) readNext();
+    }
+  };
+
+  document.getElementById('current-sentence').textContent = sentence;
+  synth.speak(utt);
+}
+
+function pauseReading() {
+  isPlaying = false;
+  synth.cancel();
+  updatePlayBtn();
+  setStatus('Pausiert');
+}
+
+function stopReading() {
+  isPlaying = false;
+  synth.cancel();
+  currentIdx = 0;
+  updatePlayBtn();
+  clearHighlights();
+  updateProgress();
+  setStatus('Gestoppt');
+  if (sentences.length > 0) {
+    document.getElementById('current-sentence').textContent = sentences[0] || '...';
+  }
+}
+
+function prevSentence() {
+  const wasPlaying = isPlaying;
+  synth.cancel();
+  isPlaying = false;
+  currentIdx = Math.max(0, currentIdx - 1);
+  updateProgress();
+  if (wasPlaying) { isPlaying = true; updatePlayBtn(); readNext(); }
+  else highlightSentence(currentIdx);
+}
+
+function nextSentence() {
+  const wasPlaying = isPlaying;
+  synth.cancel();
+  isPlaying = false;
+  currentIdx = Math.min(sentences.length - 1, currentIdx + 1);
+  updateProgress();
+  if (wasPlaying) { isPlaying = true; updatePlayBtn(); readNext(); }
+  else highlightSentence(currentIdx);
+}
+
+function jumpTo(idx) {
+  const wasPlaying = isPlaying;
+  synth.cancel();
+  isPlaying = false;
+  currentIdx = idx;
+  updateProgress();
+  if (wasPlaying) { isPlaying = true; updatePlayBtn(); readNext(); }
+  else {
+    highlightSentence(idx);
+    document.getElementById('current-sentence').textContent = sentences[idx];
+  }
+}
+
+// ================================================================
+// HIGHLIGHTS
+// ================================================================
+function highlightSentence(idx) {
+  clearHighlights();
+  const span = document.querySelector(`.sent[data-idx="${idx}"]`);
+  if (span) {
+    span.classList.add('reading');
+    span.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+  // Mark previous as done
+  for (let i = 0; i < idx; i++) {
+    const s = document.querySelector(`.sent[data-idx="${i}"]`);
+    if (s) s.classList.add('done');
+  }
+}
+
+function clearHighlights() {
+  document.querySelectorAll('.sent').forEach(s => {
+    s.classList.remove('reading', 'done');
+  });
+}
+
+// ================================================================
+// UI HELPERS
+// ================================================================
+function updatePlayBtn() {
+  document.getElementById('play-icon').textContent = isPlaying ? '⏸' : '▶';
+  document.getElementById('play-label').textContent = isPlaying ? 'PAUSE' : 'VORLESEN';
+  document.getElementById('btn-play').classList.toggle('active', isPlaying);
+}
+
+function updateProgress() {
+  if (sentences.length === 0) return;
+  const pct = Math.round((currentIdx / sentences.length) * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-info').textContent = `${currentIdx} / ${sentences.length} Sätze`;
+}
+
+function changeFontSize(delta) {
+  fontSize = Math.max(10, Math.min(28, fontSize + delta));
+  document.getElementById('text-area').style.fontSize = fontSize + 'px';
+  document.getElementById('font-size-display').textContent = fontSize;
+}
+
+function copyText() {
+  if (!fullText) return;
+  navigator.clipboard.writeText(fullText).then(() => setStatus('Text kopiert ✓'));
+}
+
+function clearAll() {
+  stopReading();
+  fullText = '';
+  sentences = [];
+  currentIdx = 0;
+  document.getElementById('text-area').innerHTML = `
+    <div id="empty-state">
+      <div class="es-icon">📖</div>
+      <div class="es-text">Kein Dokument geladen.<br>Datei links ablegen oder hochladen.</div>
+      <div class="es-formats">PDF · EPUB · TXT · MD</div>
+    </div>`;
+  document.getElementById('file-info').style.display = 'none';
+  document.getElementById('current-sentence').textContent = 'Lade eine Datei um zu beginnen...';
+  document.getElementById('prog-bar').style.width = '0%';
+  document.getElementById('prog-pct').textContent = '0%';
+  document.getElementById('prog-info').textContent = 'Kein Dokument geladen';
+  document.getElementById('word-count').textContent = '';
+  ['btn-play','btn-prev','btn-next','btn-stop','btn-copy','btn-clear'].forEach(id => {
+    document.getElementById(id).disabled = false; // keep enabled for UX
+  });
+  setStatus('Bereit');
+}
+
+// ================================================================
+// LESEZEICHEN
+// ================================================================
+let bookmarks = JSON.parse(localStorage.getItem('helferlein_bookmarks') || '[]');
+
+function addBookmark() {
+  if (!sentences.length) return;
+  const bm = {
+    idx: currentIdx,
+    text: sentences[currentIdx] ? sentences[currentIdx].slice(0, 60) + '...' : '',
+    file: document.getElementById('file-name').textContent,
+    date: new Date().toLocaleDateString('de-DE')
+  };
+  bookmarks.unshift(bm);
+  if (bookmarks.length > 20) bookmarks.pop();
+  localStorage.setItem('helferlein_bookmarks', JSON.stringify(bookmarks));
+  renderBookmarks();
+  setStatus('Lesezeichen gesetzt ✓');
+}
+
+function renderBookmarks() {
+  const list = document.getElementById('bookmark-list');
+  list.innerHTML = '';
+  bookmarks.forEach((bm, i) => {
+    const d = document.createElement('div');
+    d.style.cssText = 'background:var(--surface2);border:1px solid var(--border);padding:5px 8px;' +
+      'border-radius:4px;cursor:pointer;font-size:0.62rem;color:var(--muted);display:flex;justify-content:space-between;align-items:center;';
+    d.innerHTML = `<span onclick="jumpToBookmark(${i})" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${bm.text}">
+      🔖 ${bm.file} — Satz ${bm.idx+1}</span>
+      <span onclick="deleteBookmark(${i})" style="color:var(--red);margin-left:6px;flex-shrink:0;">✕</span>`;
+    list.appendChild(d);
+  });
+}
+
+function jumpToBookmark(i) {
+  const bm = bookmarks[i];
+  if (bm && bm.idx < sentences.length) {
+    currentIdx = bm.idx;
+    highlightSentence(currentIdx);
+    updateProgress();
+  }
+}
+
+function deleteBookmark(i) {
+  bookmarks.splice(i, 1);
+  localStorage.setItem('helferlein_bookmarks', JSON.stringify(bookmarks));
+  renderBookmarks();
+}
+
+renderBookmarks();
+
+// ================================================================
+// NOTIZEN
+// ================================================================
+function saveNotes() {
+  const notes = document.getElementById('notes-area').value;
+  const key = 'notes_' + document.getElementById('file-name').textContent;
+  localStorage.setItem(key, notes);
+  setStatus('Notizen gespeichert ✓');
+}
+
+function loadNotes(filename) {
+  const key = 'notes_' + filename;
+  const notes = localStorage.getItem(key) || '';
+  document.getElementById('notes-area').value = notes;
+}
+
+function exportNotes() {
+  const notes = document.getElementById('notes-area').value;
+  if (!notes) return;
+  const fname = document.getElementById('file-name').textContent || 'notizen';
+  const blob = new Blob([notes], {type: 'text/plain;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'notizen_' + fname.replace(/\.[^.]+$/, '') + '.txt';
+  a.click();
+}
+
+// ================================================================
+// MUSIK PLAYER
+// ================================================================
+let musicFiles = [];
+let musicIdx   = 0;
+const musicEl  = document.getElementById('music-player');
+
+function loadMusic(files) {
+  musicFiles = Array.from(files);
+  musicIdx = 0;
+  if (musicFiles.length > 0) {
+    playMusicTrack(0);
+  }
+}
+
+function playMusicTrack(idx) {
+  if (!musicFiles.length) return;
+  musicIdx = (idx + musicFiles.length) % musicFiles.length;
+  const file = musicFiles[musicIdx];
+  musicEl.src = URL.createObjectURL(file);
+  musicEl.volume = parseFloat(document.getElementById('music-vol').value);
+  musicEl.play();
+  document.getElementById('music-title').textContent = file.name.replace(/\.[^.]+$/, '');
+  document.getElementById('music-play-btn').textContent = '⏸';
+}
+
+function toggleMusic() {
+  if (!musicFiles.length) return;
+  if (musicEl.paused) {
+    musicEl.play();
+    document.getElementById('music-play-btn').textContent = '⏸';
+  } else {
+    musicEl.pause();
+    document.getElementById('music-play-btn').textContent = '▶';
+  }
+}
+
+function musicNext() { playMusicTrack(musicIdx + 1); }
+function musicPrev() { playMusicTrack(musicIdx - 1); }
+function setMusicVol(v) { musicEl.volume = parseFloat(v); }
+
+function setStatus(txt) {
+  document.getElementById('status-text').textContent = txt;
+}
+
+function showLoading(show) {
+  document.getElementById('loading').classList.toggle('show', show);
+}
+
+// ================================================================
+// DIKTAT — Web Speech API
+// ================================================================
+let recognition = null;
+let dictating = false;
+let dictLang = 'de-DE';
+
+function switchTab(tab) {
+  ['reader','diktat','musik','notizen'].forEach(t => {
+    const p = document.getElementById('tab-'+t);
+    if (p) p.style.display = t === tab ? 'flex' : 'none';
+    const b = document.getElementById('btn-tab-'+t);
+    if (b) b.classList.toggle('tab-active', t === tab);
+  });
+  if (tab !== 'reader') stopReading();
+  if (tab === 'notizen') renderNoteList();
+}
+
+function toggleDiktat() {
+  if (dictating) stopDiktat();
+  else startDiktat();
+}
+
+function startDiktat() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    alert('Spracherkennung nicht verfügbar. Bitte Chrome nutzen.');
+    return;
+  }
+  recognition = new SR();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = dictLang;
+
+  recognition.onresult = e => {
+    let interim = '', final = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const t = e.results[i][0].transcript;
+      if (e.results[i].isFinal) final += t + ' ';
+      else interim += t;
+    }
+    if (final) {
+      const ta = document.getElementById('diktat-text');
+      const cur = ta.innerText.trim();
+      const cap = final.trim().charAt(0).toUpperCase() + final.trim().slice(1);
+      ta.innerText = cur ? cur + ' ' + cap : cap;
+      ta.scrollTop = ta.scrollHeight;
+      // Cursor ans Ende
+      const range = document.createRange();
+      const sel = window.getSelection();
+      range.selectNodeContents(ta);
+      range.collapse(false);
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+    document.getElementById('diktat-interim').textContent = interim;
+  };
+
+  recognition.onerror = e => {
+    if (e.error === 'no-speech') return;
+    document.getElementById('diktat-status').textContent = 'Fehler: ' + e.error;
+  };
+
+  recognition.onend = () => {
+    document.getElementById('diktat-interim').textContent = '';
+    if (dictating) {
+      try { recognition.start(); } catch(e) {}
+    }
+  };
+
+  dictating = true;
+  document.getElementById('diktat-btn').textContent = '⏹ STOPPEN';
+  document.getElementById('diktat-btn').style.background = '#dc2626';
+  document.getElementById('diktat-status').textContent = '🔴 Aufnahme läuft — sprich jetzt...';
+  blinkDiktat();
+  try { recognition.start(); } catch(e) {}
+}
+
+function stopDiktat() {
+  dictating = false;
+  if (recognition) recognition.stop();
+  document.getElementById('diktat-btn').textContent = '🎤 DIKTIEREN';
+  document.getElementById('diktat-btn').style.background = 'var(--accent)';
+  document.getElementById('diktat-status').textContent = 'Bereit';
+}
+
+function blinkDiktat() {
+  if (!dictating) return;
+  const s = document.getElementById('diktat-status');
+  s.style.opacity = s.style.opacity === '0.4' ? '1' : '0.4';
+  setTimeout(blinkDiktat, 600);
+}
+
+function diktatVorlesen() {
+  const text = document.getElementById('diktat-text').innerText.trim();
+  if (!text) return;
+  // Text in Reader laden und vorlesen
+  fullText = text;
+  displayText(text, 'Diktat', text.length);
+  switchTab('reader');
+  setTimeout(() => startReading(), 300);
+}
+
+function diktatSpeichern(format) {
+  const text = document.getElementById('diktat-text').innerText.trim();
+  if (!text) return;
+  const datum = new Date().toLocaleDateString('de').replace(/\./g,'-');
+  const name = 'diktat_' + datum;
+
+  if (format === 'txt') {
+    const blob = new Blob([text], {type: 'text/plain;charset=utf-8'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name + '.txt';
+    a.click();
+  }
+  else if (format === 'pdf') {
+    const win = window.open('', '_blank');
+    win.document.write(`<!DOCTYPE html><html><head>
+      <meta charset="UTF-8"><title>${name}</title>
+      <style>body{font-family:Georgia,serif;font-size:13pt;line-height:1.8;margin:2.5cm 3cm;color:#111;}
+      h1{font-size:14pt;color:#444;margin-bottom:1cm;border-bottom:1px solid #ccc;padding-bottom:6px;}
+      @media print{@page{margin:2.5cm 3cm;}}</style>
+    </head><body>
+      <h1>Helferlein Diktat — ${new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'})}</h1>
+      ${text.split('\n').filter(l=>l.trim()).map(l=>`<p>${l}</p>`).join('')}
+    </body></html>`);
+    win.document.close();
+    setTimeout(() => { win.print(); }, 500);
+  }
+  else if (format === 'html') {
+    const html = `<!DOCTYPE html><html lang="de"><head>
+<meta charset="UTF-8"><title>${name}</title>
+<style>body{font-family:Georgia,serif;font-size:13pt;line-height:1.8;margin:3cm;color:#111;}
+h1{font-size:14pt;color:#444;border-bottom:1px solid #ccc;padding-bottom:6px;margin-bottom:1cm;}</style>
+</head><body>
+<h1>Diktat vom ${new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'})}</h1>
+${text.split('\n').filter(l=>l.trim()).map(l=>`<p>${l}</p>`).join('\n')}
+</body></html>`;
+    const blob = new Blob([html], {type: 'text/html;charset=utf-8'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name + '.html';
+    a.click();
+  }
+}
+
+function diktatDrucken() {
+  const text = document.getElementById('diktat-text').innerText.trim();
+  if (!text) return;
+  const win = window.open('', '_blank');
+  win.document.write(`<!DOCTYPE html><html><head>
+    <meta charset="UTF-8"><title>Diktat</title>
+    <style>body{font-family:Georgia,serif;font-size:13pt;line-height:1.9;margin:2.5cm 3cm;color:#111;}
+    h1{font-size:13pt;color:#555;border-bottom:1px solid #ddd;padding-bottom:5px;margin-bottom:1cm;}
+    @media print{@page{margin:2.5cm 3cm;}}</style>
+  </head><body>
+    <h1>Diktat — ${new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'})}</h1>
+    ${text.split('\n').filter(l=>l.trim()).map(l=>`<p>${l}</p>`).join('')}
+  </body></html>`);
+  win.document.close();
+  setTimeout(() => win.print(), 400);
+}
+
+function diktatLeeren() {
+  stopDiktat();
+  document.getElementById('diktat-text').innerText = '';
+  document.getElementById('diktat-interim').textContent = '';
+}
+
+
+// ================================================================
+// MUSIK
+// ================================================================
+let mPlaylist=[], mIdx=0, mPlaying=false;
+const mAudio = document.getElementById('maudio');
+
+function loadMusicFiles(files) {
+  Array.from(files).forEach(f => {
+    if (f.type.startsWith('audio/'))
+      mPlaylist.push({name: f.name.replace(/\.[^.]+$/,''), url: URL.createObjectURL(f)});
+  });
+  renderMusicList();
+  if (mPlaylist.length === 1) mPlay(0);
+}
+
+function renderMusicList() {
+  const el = document.getElementById('mlist');
+  if (!mPlaylist.length) {
+    el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);"><div style="font-size:3rem;opacity:.3;">🎵</div><div style="margin-top:10px;">Musik laden</div></div>';
+    return;
+  }
+  el.innerHTML = mPlaylist.map((t,i) => `
+    <div onclick="mPlay(${i})" style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:4px;cursor:pointer;background:${i===mIdx&&mPlaying?'rgba(192,132,252,.15)':'transparent'};">
+      <span>${i===mIdx&&mPlaying?'▶':'🎵'}</span>
+      <span style="flex:1;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${t.name}</span>
+    </div>`).join('');
+}
+
+function mPlay(i) {
+  mIdx=i; mAudio.src=mPlaylist[i].url;
+  mAudio.volume=parseFloat(document.getElementById('mvol').value);
+  mAudio.play(); mPlaying=true;
+  document.getElementById('mpbtn').textContent='⏸';
+  document.getElementById('mnow').textContent='🎵 '+mPlaylist[i].name;
+  renderMusicList();
+}
+function mToggle() {
+  if (!mPlaylist.length) return;
+  if (mPlaying) { mAudio.pause(); mPlaying=false; document.getElementById('mpbtn').textContent='▶'; }
+  else { mAudio.play(); mPlaying=true; document.getElementById('mpbtn').textContent='⏸'; }
+}
+function mPrev() { if(mPlaylist.length) mPlay((mIdx-1+mPlaylist.length)%mPlaylist.length); }
+function mNext() { if(mPlaylist.length) mPlay((mIdx+1)%mPlaylist.length); }
+function mEnded() {
+  if (document.getElementById('m-repeat').checked) { mAudio.play(); return; }
+  if (document.getElementById('m-shuffle').checked) { mPlay(Math.floor(Math.random()*mPlaylist.length)); return; }
+  if (mIdx < mPlaylist.length-1) mPlay(mIdx+1);
+  else { mPlaying=false; document.getElementById('mpbtn').textContent='▶'; }
+}
+function mSeek(v) { if(mAudio.duration) mAudio.currentTime=v/100*mAudio.duration; }
+function mSetVol(v) { mAudio.volume=v; }
+function mUpdate() {
+  if (!mAudio.duration) return;
+  document.getElementById('mprog').value=mAudio.currentTime/mAudio.duration*100;
+  const f=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
+  document.getElementById('mtime').textContent=f(mAudio.currentTime)+' / '+f(mAudio.duration);
+}
+function clearMusicList() {
+  mPlaylist=[]; mIdx=0; mAudio.pause(); mPlaying=false;
+  renderMusicList();
+  document.getElementById('mnow').textContent='Kein Titel';
+  document.getElementById('mpbtn').textContent='▶';
+}
+
+// ================================================================
+// NOTIZEN
+// ================================================================
+let allNotes = JSON.parse(localStorage.getItem('hf_notes2')||'[]');
+let curNoteId = null;
+
+function renderNoteList() {
+  allNotes = JSON.parse(localStorage.getItem('hf_notes2')||'[]');
+  const el = document.getElementById('note-list');
+  if (!allNotes.length) {
+    el.innerHTML = '<div style="font-size:.68rem;color:#444;padding:8px;line-height:1.6;">Noch keine Notizen.<br>Klicke auf NEUE NOTIZ.</div>';
+    return;
+  }
+  el.innerHTML = allNotes.map(n => `
+    <div onclick="openNote(${n.id})" style="background:${n.id===curNoteId?'rgba(192,132,252,.15)':'var(--surface2)'};border:1px solid var(--border);border-radius:4px;padding:8px;margin-bottom:5px;cursor:pointer;">
+      <div style="font-size:.75rem;color:var(--text);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${n.title||'Ohne Titel'}</div>
+      <div style="font-size:.6rem;color:var(--muted);">${n.date}</div>
+      <div style="font-size:.65rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${(n.body||'').slice(0,50)}</div>
+    </div>`).join('');
+}
+
+function newNote() {
+  const note = {id: Date.now(), title:'', body:'', date: new Date().toLocaleDateString('de-DE')};
+  allNotes.unshift(note);
+  localStorage.setItem('hf_notes2', JSON.stringify(allNotes));
+  curNoteId = note.id;
+  document.getElementById('note-title-inp').value = '';
+  document.getElementById('note-body-inp').value = '';
+  document.getElementById('note-save-status').textContent = '';
+  renderNoteList();
+  document.getElementById('note-title-inp').focus();
+}
+
+function openNote(id) {
+  curNoteId = id;
+  const note = allNotes.find(n=>n.id===id);
+  if (!note) return;
+  document.getElementById('note-title-inp').value = note.title||'';
+  document.getElementById('note-body-inp').value = note.body||'';
+  renderNoteList();
+}
+
+function autosaveNote() {
+  if (!curNoteId) { newNote(); return; }
+  const idx = allNotes.findIndex(n=>n.id===curNoteId);
+  if (idx<0) return;
+  allNotes[idx].title = document.getElementById('note-title-inp').value||'Ohne Titel';
+  allNotes[idx].body  = document.getElementById('note-body-inp').value;
+  localStorage.setItem('hf_notes2', JSON.stringify(allNotes));
+  document.getElementById('note-save-status').textContent = '✓ Gespeichert';
+  renderNoteList();
+}
+
+function deleteCurrentNote() {
+  if (!curNoteId || !confirm('Notiz löschen?')) return;
+  allNotes = allNotes.filter(n=>n.id!==curNoteId);
+  localStorage.setItem('hf_notes2', JSON.stringify(allNotes));
+  curNoteId = null;
+  document.getElementById('note-title-inp').value='';
+  document.getElementById('note-body-inp').value='';
+  document.getElementById('note-save-status').textContent='';
+  renderNoteList();
+}
+
+function exportNoteAs(fmt) {
+  const title = document.getElementById('note-title-inp').value||'Notiz';
+  const body  = document.getElementById('note-body-inp').value;
+  if (!body) return;
+  const d = new Date().toLocaleDateString('de').replace(/\./g,'-');
+  if (fmt==='txt') {
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([title+'\n\n'+body],{type:'text/plain;charset=utf-8'}));
+    a.download='notiz_'+d+'.txt'; a.click();
+  } else {
+    const w=window.open('','_blank');
+    w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:Georgia,serif;font-size:13pt;line-height:1.8;margin:2.5cm 3cm;color:#111;}h1{font-size:15pt;margin-bottom:1cm;}@media print{@page{margin:2.5cm 3cm;}}</style></head><body><h1>'+title+'</h1>'+body.split('\n').map(l=>'<p>'+l+'</p>').join('')+'</body></html>');
+    w.document.close(); setTimeout(()=>w.print(),400);
+  }
+}
+
+</script>
+
+<style>
+/* TABS */
+#tab-bar {
+  display: flex;
+  gap: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-family: 'Lato', sans-serif;
+  font-size: 0.78rem;
+  padding: 10px 24px;
+  cursor: pointer;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.tab-active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* DIKTAT TAB */
+#tab-diktat {
+  flex: 1;
+  display: none;
+  flex-direction: row;
+  overflow: hidden;
+}
+#diktat-left {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#diktat-btn {
+  background: var(--accent);
+  border: none;
+  color: white;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+}
+#diktat-status {
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 1px;
+  min-height: 20px;
+}
+.dik-sec { font-size: 0.6rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin: 6px 0 3px; }
+#diktat-lang {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 0.72rem;
+  padding: 5px 8px;
+  border-radius: 4px;
+  width: 100%;
+}
+.dik-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 0.72rem;
+  padding: 7px;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 100%;
+  transition: all 0.15s;
+  text-align: left;
+}
+.dik-btn:hover { border-color: var(--accent); }
+
+#diktat-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+}
+#diktat-interim {
+  background: rgba(192,132,252,0.08);
+  border-left: 3px solid var(--accent);
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  color: var(--accent);
+  font-style: italic;
+  min-height: 36px;
+  flex-shrink: 0;
+}
+#diktat-text {
+  flex: 1;
+  padding: 32px 40px;
+  font-family: Georgia, serif;
+  font-size: 14px;
+  line-height: 1.9;
+  color: #111827;
+  overflow-y: auto;
+  outline: none;
+}
+#diktat-text:empty::before {
+  content: 'Klicke auf DIKTIEREN und sprich...';
+  color: #9ca3af;
+  font-style: italic;
+}
+</style>
