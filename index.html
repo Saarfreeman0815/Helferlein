@@ -421,8 +421,16 @@ input[type=text],input[type=time],input[type=date],textarea{
           padding:8px 16px;border-radius:6px;cursor:pointer;">
           ☕ Projekt unterstützen
         </button>
-
-      </div>
+        <button onclick="exportDaten()"
+          style="background:var(--surface2);border:1px solid var(--border);color:var(--text);
+          font-size:.75rem;padding:8px 16px;border-radius:6px;cursor:pointer;">
+          💾 Backup
+        </button>
+        <label style="background:var(--surface2);border:1px solid var(--border);color:var(--text);
+          font-size:.75rem;padding:8px 16px;border-radius:6px;cursor:pointer;display:inline-block;">
+          📂 Wiederherstellen
+          <input type="file" accept=".json" onchange="importDaten(this)" style="display:none;">
+        </label>      </div>
     </div>
 
   </div>
@@ -3246,6 +3254,42 @@ async function getDashWetter() {
     const el = document.getElementById('dash-temp');
     if (el) el.textContent = 'Kein Internet';
   }
+}
+
+
+// ================================================================
+// BACKUP / RESTORE
+// ================================================================
+function exportDaten() {
+  const keys = ['hf_termine','hf_medis','hf_todos','hf_notes','hf_adressen',
+                 'hf_lesezeichen','hf_radio_custom','hf_username','hf_wetter_ort','hf_orte'];
+  const backup = { version: 1, datum: new Date().toLocaleDateString('de-DE'), daten: {} };
+  keys.forEach(k => {
+    const v = localStorage.getItem(k);
+    if (v) backup.daten[k] = v;
+  });
+  const blob = new Blob([JSON.stringify(backup, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'helferlein_backup_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  status('Backup erstellt!');
+}
+
+function importDaten(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const backup = JSON.parse(e.target.result);
+      if (!backup.daten) { alert('Ungültige Backup-Datei!'); return; }
+      Object.entries(backup.daten).forEach(([k,v]) => localStorage.setItem(k,v));
+      alert('Backup erfolgreich geladen! App wird neu gestartet.');
+      location.reload();
+    } catch(err) { alert('Fehler beim Laden: ' + err.message); }
+  };
+  reader.readAsText(file);
 }
 
 </script>
