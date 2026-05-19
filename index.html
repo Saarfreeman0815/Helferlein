@@ -2487,14 +2487,14 @@ function memoryHTML(){
 function memClick(id){
   const card=memCards[id]; const btn=document.getElementById('mem-'+id);
   if(card.flipped||card.solved||memFlipped.length>=2)return;
-  card.flipped=true; btn.textContent=card.emoji; memFlipped.push(card);
+  card.flipped=true; btn.textContent=card.emoji; btn.style.fontSize='2.2rem'; memFlipped.push(card);
   if(memFlipped.length===2){
     if(memFlipped[0].emoji===memFlipped[1].emoji){
       memFlipped.forEach(c=>{c.solved=true;document.getElementById('mem-'+c.id).style.background='rgba(52,211,153,.2)';});
       memSolved++; memFlipped=[];
       if(memSolved===8){const m=document.getElementById('mem-msg');if(m)m.textContent='🎉 Alle Paare gefunden!';}
     } else {
-      setTimeout(()=>{memFlipped.forEach(c=>{c.flipped=false;document.getElementById('mem-'+c.id).textContent='?';});memFlipped=[];},800);
+      setTimeout(()=>{memFlipped.forEach(c=>{c.flipped=false;const b=document.getElementById('mem-'+c.id);b.textContent='?';b.style.fontSize='1.5rem';});memFlipped=[];},800);
     }
   }
 }
