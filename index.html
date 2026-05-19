@@ -294,8 +294,8 @@ input[type=text],input[type=time],input[type=date],textarea{
     <button class="hdr-btn" onclick="toggleFont(-1)">A−</button>
     <button class="hdr-btn" onclick="toggleFont(1)">A+</button>
     <button class="hdr-btn" id="contrast-btn" onclick="toggleContrast()">☀️ Kontrast</button>
-    <button id="paypal-btn" onclick="window.open('https://ko-fi.com/helferleinprojekt')" style="background:#FF5E5B;color:#fff;border:none;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:.72rem;font-weight:700;">☕ Spenden</button>
-    <button onclick="sosNotfall()" style="background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;border:none;border-radius:5px;padding:5px 12px;cursor:pointer;font-size:.8rem;font-weight:900;letter-spacing:1px;animation:sosPulse 2s infinite;">🆘 SOS</button>
+    <button onclick="window.open('https://ko-fi.com/helferleinprojekt')" style="background:#FF5E5B;color:#fff;border:none;border-radius:5px;padding:6px 12px;cursor:pointer;font-size:.75rem;font-weight:700;min-height:36px;">☕ Spenden</button>
+    <button onclick="sosNotfall()" style="background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;border:none;border-radius:6px;padding:6px 14px;cursor:pointer;font-size:.85rem;font-weight:900;letter-spacing:1px;animation:sosPulse 2s infinite;box-shadow:0 2px 8px rgba(239,68,68,.4);min-height:36px;">🆘 SOS</button>
     <span id="hdr-status">Bereit</span>
   </div>
 </div>
@@ -1194,7 +1194,7 @@ let currentRadio = null;
 // ================================================================
 // TABS
 // ================================================================
-const TABS = ['dashboard','reader','diktat','editor','notizen','todo','medi','terme',
+const TABS = ['dashboard','reader','diktat','editor','notizen','todo','medi','termine',
               'adressen','musik','radio','bilder','spiele','aquarium','lesezeichen','uebersetzer','tagebuch'];
 
 function showTab(id) {
@@ -1775,13 +1775,22 @@ function clearDone() { todos=todos.filter(t=>!t.done); save('hf_todos',todos); r
 function mediPreview(input) {
   const file = input.files[0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const prev = document.getElementById('medi-foto-prev');
-    prev.src = e.target.result;
-    prev.style.display = 'block';
-  };
-  reader.readAsDataURL(file);
+  try {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const prev = document.getElementById('medi-foto-prev');
+      prev.src = e.target.result;
+      prev.style.display = 'block';
+    };
+    reader.onerror = () => {
+      alert('Foto konnte nicht geladen werden. Bitte ein anderes Bild versuchen.');
+      input.value = '';
+    };
+    reader.readAsDataURL(file);
+  } catch(err) {
+    alert('Kamera / Foto nicht verfügbar: ' + err.message);
+    input.value = '';
+  }
 }
 
 function addMedi() {
@@ -3571,10 +3580,12 @@ function tbDiktieren() {
 function tbSpeichern() {
   const text = document.getElementById('tb-text').value.trim();
   if (!text) { alert('Bitte zuerst etwas schreiben oder diktieren!'); return; }
+  const now = new Date();
   const eintrag = {
-    id: Date.now(),
-    datum: new Date().toLocaleDateString('de-DE', {weekday:'long', year:'numeric', month:'long', day:'numeric'}),
-    zeit: new Date().toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'}),
+    id: now.getTime(),
+    datum: now.toLocaleDateString('de-DE', {weekday:'long', year:'numeric', month:'long', day:'numeric'}),
+    zeit: now.toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit', second:'2-digit'}),
+    zeitstempel: now.toLocaleString('de-DE'),
     mood: tbMood,
     text: text
   };
@@ -3603,6 +3614,7 @@ function renderTagebuch() {
         <div class="tb-entry-date">${e.mood || ''} ${e.datum} · ${e.zeit}</div>
         <button onclick="tbLoeschen(${e.id})" style="background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:.8rem;" title="Löschen">🗑</button>
       </div>
+      ${e.zeitstempel ? `<div style="font-size:.58rem;color:var(--muted);margin-top:2px;">📅 Gespeichert: ${e.zeitstempel}</div>` : ''}
       <div class="tb-entry-text">${e.text.replace(/\n/g,'<br>')}</div>
     </div>`).join('');
 }
