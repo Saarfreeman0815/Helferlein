@@ -24,8 +24,9 @@ body{background:var(--bg);color:var(--text);font-family:'Lato',sans-serif;
   display:flex;align-items:center;gap:10px;flex-shrink:0;}
 #logo{font-family:'Playfair Display',serif;font-size:1.15rem;
   background:linear-gradient(135deg,var(--accent),var(--accent2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-#hdr-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  padding-right:4px;}
+#hdr-right{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0;}
 #hdr-status{font-size:.62rem;color:var(--muted);}
 .hdr-btn{background:transparent;border:1px solid var(--border);color:var(--muted);
   font-size:.75rem;padding:6px 12px;cursor:pointer;border-radius:4px;transition:all .15s;min-height:36px;}
@@ -2477,7 +2478,7 @@ function memoryHTML(){
     <div style="font-size:1.2rem;font-weight:700;color:var(--accent);margin-bottom:12px;">🃏 Memory</div>
     <div id="mem-msg" style="font-size:.85rem;color:var(--muted);margin-bottom:8px;">Finde alle Paare!</div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:320px;">
-      ${memCards.map(c=>`<button onclick="memClick(${c.id})" id="mem-${c.id}" style="width:70px;height:70px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-size:1.8rem;cursor:pointer;">?</button>`).join('')}
+      ${memCards.map(c=>`<button onclick="memClick(${c.id})" id="mem-${c.id}" style="width:70px;height:70px;background:var(--surface2);border:2px solid var(--border);border-radius:8px;font-size:1.8rem;cursor:pointer;color:#fff;font-weight:900;font-size:1.5rem;letter-spacing:1px;box-shadow:0 2px 6px rgba(0,0,0,.3);">?</button>`).join('')}
     </div>
     <button onclick="startGame('memory')" style="margin-top:10px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:.78rem;padding:7px 14px;cursor:pointer;border-radius:4px;">Neu starten</button>
   </div>`;
@@ -3591,7 +3592,8 @@ function tbSpeichern() {
   };
   tbEintraege.unshift(eintrag);
   localStorage.setItem('hf_tagebuch', JSON.stringify(tbEintraege));
-  document.getElementById('tb-text').value = '';
+  const taEl = document.getElementById('tb-text');
+  if (taEl) { taEl.value = ''; taEl.dispatchEvent(new Event('input')); }
   tbMood = '';
   document.getElementById('tb-mood-sel').textContent = 'Keine Stimmung gewählt';
   document.getElementById('tb-mood-display').textContent = '';
