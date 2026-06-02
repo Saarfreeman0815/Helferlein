@@ -296,8 +296,7 @@ input[type=text],input[type=time],input[type=date],textarea{
     <button class="hdr-btn" onclick="toggleFont(1)">A+</button>
     <button class="hdr-btn" id="contrast-btn" onclick="toggleContrast()">☀️ Kontrast</button>
     <button onclick="window.open('https://ko-fi.com/helferleinprojekt')" style="background:#FF5E5B;color:#fff;border:none;border-radius:5px;padding:6px 12px;cursor:pointer;font-size:.75rem;font-weight:700;min-height:36px;">☕ Spenden</button>
-    <button onclick="sosNotfall()" style="background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;border:none;border-radius:6px;padding:6px 14px;cursor:pointer;font-size:.85rem;font-weight:900;letter-spacing:1px;animation:sosPulse 2s infinite;box-shadow:0 2px 8px rgba(239,68,68,.4);min-height:36px;">🆘 SOS</button>
-    <span id="hdr-status">Bereit</span>
+ 
   </div>
 </div>
 
@@ -3647,53 +3646,88 @@ function tbExport() {
 // ================================================================
 // SOS NOTFALL
 // ================================================================
-function sosNotfall() {
-  // Gespeicherten Kontakt laden
+// ================================================================
+// SOS NOTFALL
+// ================================================================
+
+// Neue SOS-Funktionen (ohne Konflikte mit alter Version)
+function openSosModal() {
+  const modal = document.getElementById('sos-modal-neu');
+  if (modal) modal.style.display = 'flex';
   const name = localStorage.getItem('sos_name') || '';
   const tel = localStorage.getItem('sos_tel') || '';
-  if (name) document.getElementById('sos-name').value = name;
-  if (tel) {
-    document.getElementById('sos-tel').value = tel;
-    document.getElementById('sos-arzt-btn').textContent = '👨‍⚕️ ' + name + ' anrufen (' + tel + ')';
+  if (name) {
+    const nameInput = document.getElementById('sos-name-neu');
+    if (nameInput) nameInput.value = name;
   }
-  showModal('sos-modal');
+  if (tel) {
+    const telInput = document.getElementById('sos-tel-neu');
+    if (telInput) telInput.value = tel;
+    const arztBtn = document.getElementById('sos-arzt-btn-neu');
+    if (arztBtn) arztBtn.innerHTML = '👨‍⚕️ ' + name + ' anrufen (' + tel + ')';
+  }
 }
 
-function sosAnruf() {
+function closeSosModal() {
+  const modal = document.getElementById('sos-modal-neu');
+  if (modal) modal.style.display = 'none';
+}
+
+function sosAnrufNeu() {
   window.location.href = 'tel:112';
 }
 
-function sosArzt() {
+function sosArztNeu() {
   const tel = localStorage.getItem('sos_tel');
-  if (!tel) { alert('Bitte erst einen Notfallkontakt eintragen!'); return; }
-  window.location.href = 'tel:' + tel;
+  if (tel) {
+    window.location.href = 'tel:' + tel;
+  } else {
+    alert('Bitte zuerst einen Notfallkontakt speichern!');
+  }
 }
 
-function sosNachricht() {
-  const name = localStorage.getItem('sos_name') || 'mein Notfallkontakt';
-  const msg = 'NOTFALL! Ich brauche Hilfe! Bitte ruf mich sofort an oder schick Hilfe!';
-  navigator.clipboard.writeText(msg).then(() => {
-    alert('Nachricht in die Zwischenablage kopiert!\n\n"' + msg + '"');
-  }).catch(() => {
-    prompt('Bitte diese Nachricht kopieren:', msg);
-  });
-}
-
-function sosSaveKontakt() {
-  const name = document.getElementById('sos-name').value.trim();
-  const tel = document.getElementById('sos-tel').value.trim();
-  if (!name || !tel) { alert('Bitte Name und Telefonnummer eingeben!'); return; }
-  localStorage.setItem('sos_name', name);
-  localStorage.setItem('sos_tel', tel);
-  document.getElementById('sos-arzt-btn').textContent = '👨‍⚕️ ' + name + ' anrufen (' + tel + ')';
-  status('✓ Notfallkontakt gespeichert!');
-}
-
-function closeModal(id) {
-  const m = document.getElementById(id);
-  if (m) m.classList.remove('show');
+function sosSaveKontaktNeu() {
+  const name = document.getElementById('sos-name-neu').value.trim();
+  const tel = document.getElementById('sos-tel-neu').value.trim();
+  if (name && tel) {
+    localStorage.setItem('sos_name', name);
+    localStorage.setItem('sos_tel', tel);
+    const arztBtn = document.getElementById('sos-arzt-btn-neu');
+    if (arztBtn) arztBtn.innerHTML = '👨‍⚕️ ' + name + ' anrufen (' + tel + ')';
+    alert('✓ Notfallkontakt gespeichert!');
+    closeSosModal();
+  } else {
+    alert('Bitte Name und Telefonnummer eingeben!');
+  }
 }
 
 </script>
 </body>
+<!-- NEUER SOS-BUTTON & MODAL (ohne Konflikte) -->
+<div id="sos-modal-neu" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:100000; align-items:center; justify-content:center;">
+  <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px; min-width:280px; text-align:center;">
+    <div style="font-size:1.3rem; color:var(--red); margin-bottom:16px;">🆘 NOTFALL</div>
+    <button onclick="sosAnrufNeu()" style="background:var(--red); color:#fff; border:none; padding:12px; width:100%; border-radius:8px; margin-bottom:8px; cursor:pointer;">📞 NOTRUF 112</button>
+    <button id="sos-arzt-btn-neu" onclick="sosArztNeu()" style="background:var(--surface2); border:1px solid var(--border); padding:12px; width:100%; border-radius:8px; margin-bottom:8px; cursor:pointer;">👨‍⚕️ Notfallkontakt anrufen</button>
+    <div style="margin-top:12px; border-top:1px solid var(--border); padding-top:12px;">
+      <input id="sos-name-neu" class="modal-inp" placeholder="Name" style="width:100%; margin-bottom:6px;">
+      <input id="sos-tel-neu" class="modal-inp" placeholder="Telefon" style="width:100%; margin-bottom:8px;">
+      <button onclick="sosSaveKontaktNeu()" style="background:var(--accent); border:none; padding:8px 16px; border-radius:6px; cursor:pointer;">💾 Speichern</button>
+    </div>
+    <button onclick="closeSosModal()" style="background:transparent; border:1px solid var(--border); padding:8px 16px; border-radius:6px; margin-top:12px; cursor:pointer;">Schließen</button>
+  </div>
+</div>
+
+<button class="sos-fixed" onclick="openSosModal()" style="position:fixed; bottom:20px; right:20px; width:70px; height:70px; border-radius:50%; background:linear-gradient(135deg,#ef4444,#b91c1c); color:white; border:none; font-size:2rem; font-weight:900; cursor:pointer; z-index:99999; display:flex; align-items:center; justify-content:center; animation:sosPulse 1.5s infinite;">🆘</button>
+
+<style>
+@keyframes sosPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.7); }
+  50% { box-shadow: 0 0 0 12px rgba(239,68,68,0); }
+}
+.sos-fixed:hover { transform: scale(1.1); }
+@media (max-width: 480px) {
+  .sos-fixed { width: 60px; height: 60px; font-size: 1.6rem; bottom: 15px; right: 15px; }
+}
+</style>
 </html>
