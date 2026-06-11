@@ -7,19 +7,19 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap');
 :root {
-  --bg:#0f0f17; --surface:#1a1a28; --surface2:#242438;
-  --accent:#c084fc; --accent2:#818cf8; --text:#e2e8f0;
-  --muted:#94a3b8; --border:#2d2d45; --green:#34d399;
-  --red:#f87171; --gold:#fbbf24; --blue:#60a5fa;
+  --bg:#f0f0f8; --surface:#ffffff; --surface2:#e8e8f4;
+  --accent:#7c3aed; --accent2:#6366f1; --text:#1a1a2e;
+  --muted:#64748b; --border:#d0d0e0; --green:#059669;
+  --red:#dc2626; --gold:#d97706; --blue:#2563eb;
   --font-scale: 1;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:'Lato',sans-serif;
   height:100vh;display:flex;flex-direction:column;overflow:hidden;
-  font-size:calc(14px * var(--font-scale));}
+  font-size:calc(20px * var(--font-scale));}
 
 /* HEADER */
-#hdr{background:linear-gradient(135deg,#1a1a28,#0f0f17);
+#hdr{background:linear-gradient(135deg,#ffffff,#f0f0f8);
   border-bottom:1px solid var(--border);padding:6px 14px;
   display:flex;align-items:center;gap:10px;flex-shrink:0;}
 #logo{font-family:'Playfair Display',serif;font-size:1.15rem;
@@ -42,15 +42,16 @@ body{background:var(--bg);color:var(--text);font-family:'Lato',sans-serif;
 #tabbar::-webkit-scrollbar{height:2px;}
 .tab{background:transparent;border:none;border-bottom:3px solid transparent;
   color:var(--muted);font-family:'Lato',sans-serif;
-  font-size:calc(.85rem * var(--font-scale));padding:14px 18px;cursor:pointer;
+  font-size:calc(1rem * var(--font-scale));padding:14px 18px;cursor:pointer;
   letter-spacing:.5px;white-space:nowrap;transition:all .2s;min-height:48px;}
 .tab:hover{color:var(--text);}
 .tab.on{color:var(--accent);border-bottom-color:var(--accent);}
 
 /* PANELS */
 #panels{flex:1;display:flex;overflow:hidden;}
-.panel{display:none;flex:1;overflow:hidden;flex-direction:column;}
-.panel.on{display:flex;}
+.panel{display:none;flex:1;overflow:hidden;flex-direction:column;height:100%;}
+.panel.on{display:flex;flex-direction:column;height:100%;}
+
 .panel-row{display:flex;flex:1;overflow:hidden;}
 
 /* SIDEBAR */
@@ -62,14 +63,14 @@ body{background:var(--bg);color:var(--text);font-family:'Lato',sans-serif;
   text-transform:uppercase;border-bottom:1px solid var(--border);
   padding-bottom:3px;margin:4px 0 2px;}
 .sb-btn{background:var(--surface2);border:1px solid var(--border);
-  color:var(--text);font-size:calc(.78rem * var(--font-scale));
+  color:var(--text);font-size:calc(1rem * var(--font-scale));
   padding:10px 12px;cursor:pointer;border-radius:6px;
   width:100%;text-align:left;transition:all .15s;
   min-height:44px;display:flex;align-items:center;}
 .sb-btn:hover{border-color:var(--accent);}
 .sb-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
 .sb-sel{width:100%;background:var(--surface2);border:1px solid var(--border);
-  color:var(--text);font-size:calc(.78rem * var(--font-scale));
+  color:var(--text);font-size:calc(1rem * var(--font-scale));
   padding:8px 8px;border-radius:6px;min-height:40px;}
 .sb-range{width:100%;accent-color:var(--accent);}
 .sb-lbl{font-size:.62rem;color:var(--muted);
@@ -120,12 +121,12 @@ body{background:var(--bg);color:var(--text);font-family:'Lato',sans-serif;
 
 /* DIKTAT */
 .dik-paper{flex:1;background:#fff;color:#111827;font-family:Georgia,serif;
-  font-size:calc(13px * var(--font-scale));line-height:1.85;
+  font-size:calc(18px * var(--font-scale));line-height:1.85;
   padding:24px 32px;overflow-y:auto;outline:none;}
 .dik-paper:empty::before{content:'Klicke auf DIKTIEREN und sprich...';
   color:#9ca3af;font-style:italic;}
 .interim{background:rgba(192,132,252,.08);border-left:3px solid var(--accent);
-  padding:6px 14px;font-size:calc(.78rem * var(--font-scale));
+  padding:6px 14px;font-size:calc(1rem * var(--font-scale));
   color:var(--accent);font-style:italic;min-height:32px;flex-shrink:0;}
 
 /* NOTIZEN */
@@ -158,8 +159,8 @@ body{background:var(--bg);color:var(--text);font-family:'Lato',sans-serif;
 .ed-paper-wrap{flex:1;overflow-y:auto;background:#e8e4de;
   display:flex;justify-content:center;padding:20px 14px;}
 .ed-paper{background:#fff;width:210mm;min-height:280mm;
-  padding:20mm 18mm;font-family:Georgia,serif;font-size:12pt;
-  line-height:1.6;color:#111;box-shadow:0 2px 12px rgba(0,0,0,.2);
+  padding:20mm 18mm;font-family:Georgia,serif;font-size:16pt;
+  line-height:1.8;color:#111;box-shadow:0 2px 12px rgba(0,0,0,.2);
   outline:none;border:1px solid #ddd;}
 
 /* TODO */
@@ -167,7 +168,7 @@ body{background:var(--bg);color:var(--text);font-family:'Lato',sans-serif;
   border-bottom:1px solid var(--border);transition:all .15s;}
 .todo-item:hover{background:var(--surface2);}
 .todo-cb{width:18px;height:18px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;}
-.todo-text{flex:1;font-size:calc(.82rem * var(--font-scale));transition:all .2s;}
+.todo-text{flex:1;font-size:calc(1rem * var(--font-scale));transition:all .2s;}
 .todo-text.done{text-decoration:line-through;color:var(--muted);}
 .todo-del{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:.8rem;}
 .todo-del:hover{color:var(--red);}
@@ -177,21 +178,21 @@ body{background:var(--bg);color:var(--text);font-family:'Lato',sans-serif;
   border-radius:6px;padding:10px 12px;margin-bottom:6px;
   display:flex;align-items:center;gap:10px;}
 .medi-time{font-size:1.1rem;font-weight:700;color:var(--accent);min-width:50px;}
-.medi-name{flex:1;font-size:calc(.82rem * var(--font-scale));}
+.medi-name{flex:1;font-size:calc(1rem * var(--font-scale));}
 .medi-dose{font-size:.68rem;color:var(--muted);}
 
 /* TERMIN */
 .termin-item{background:var(--surface2);border-left:3px solid var(--accent);
   border-radius:0 6px 6px 0;padding:10px 12px;margin-bottom:6px;}
 .termin-date{font-size:.72rem;color:var(--accent);font-weight:700;}
-.termin-name{font-size:calc(.85rem * var(--font-scale));margin:2px 0;}
+.termin-name{font-size:calc(1rem * var(--font-scale));margin:2px 0;}
 .termin-note{font-size:.68rem;color:var(--muted);}
 
 /* ADRESSBUCH */
 .addr-item{background:var(--surface2);border:1px solid var(--border);
   border-radius:6px;padding:10px 12px;margin-bottom:6px;cursor:pointer;transition:all .15s;}
 .addr-item:hover{border-color:var(--accent);}
-.addr-name{font-size:calc(.85rem * var(--font-scale));font-weight:700;}
+.addr-name{font-size:calc(1rem * var(--font-scale));font-weight:700;}
 .addr-cat{font-size:.62rem;color:var(--accent);letter-spacing:1px;}
 .addr-tel{font-size:.75rem;color:var(--muted);margin-top:3px;}
 
@@ -200,16 +201,16 @@ body{background:var(--bg);color:var(--text);font-family:'Lato',sans-serif;
   border-radius:5px;cursor:pointer;transition:all .15s;}
 .radio-item:hover{background:var(--surface2);}
 .radio-item.on{background:rgba(192,132,252,.15);}
-.radio-name{flex:1;font-size:calc(.82rem * var(--font-scale));}
+.radio-name{flex:1;font-size:calc(1rem * var(--font-scale));}
 .radio-genre{font-size:.62rem;color:var(--muted);}
 
 /* SPIELE */
 .game-card{background:var(--surface2);border:1px solid var(--border);
-  border-radius:8px;padding:20px;text-align:center;cursor:pointer;
-  transition:all .2s;}
+  border-radius:16px;padding:32px 20px;text-align:center;cursor:pointer;
+  transition:all .2s;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
 .game-card:hover{border-color:var(--accent);background:rgba(192,132,252,.05);}
-.game-icon{font-size:2.5rem;margin-bottom:8px;}
-.game-name{font-size:.85rem;font-weight:700;}
+.game-icon{font-size:4rem;margin-bottom:14px;}
+.game-name{font-size:1.3rem;font-weight:700;}
 
 /* BILDER */
 .bild-item{width:80px;height:80px;object-fit:cover;border-radius:4px;
@@ -278,11 +279,80 @@ body{background:var(--bg);color:var(--text);font-family:'Lato',sans-serif;
 .tb-entry{background:var(--surface2);border:1px solid var(--border);
   border-radius:8px;padding:12px 14px;margin-bottom:8px;}
 .tb-entry-date{font-size:.62rem;color:var(--accent);font-weight:700;letter-spacing:1px;}
-.tb-entry-text{font-size:calc(.85rem * var(--font-scale));line-height:1.7;margin-top:6px;}
+.tb-entry-text{font-size:calc(1rem * var(--font-scale));line-height:1.7;margin-top:6px;}
 .tb-entry-mood{font-size:1.2rem;margin-right:6px;}
 
 input[type=text],input[type=time],input[type=date],textarea{
   font-family:'Lato',sans-serif;}
+
+/* ========== BASIS RESPONSIVE ========== */
+@media (max-width: 640px) {
+  body { font-size: 14px; }
+  #hdr { padding: 4px 10px; }
+  #logo { font-size: 1rem; }
+  .tab { padding: 8px 10px; font-size: 0.7rem; }
+  .sb { width: 180px; }
+  .game-card { padding: 20px 12px; min-height: 140px; }
+  .game-icon { font-size: 2.8rem; }
+  .game-name { font-size: 1rem; }
+}
+@media (max-width: 480px) {
+  .sb { display: none; }
+  .panel-row { flex-direction: column; }
+  #sol-game { padding: 8px; max-width: 100%; overflow-x: auto; }
+  #sol-tableau { gap: 4px; }
+  #sol-tableau > div { min-width: 50px; }
+  #mj-board { grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); gap: 3px; }
+  #mj-board > div { width: auto; height: 70px; font-size: 1.8rem; }
+  #sudoku-grid, .sudoku-grid { grid-template-columns: repeat(9, 1fr); }
+  .sudoku-cell input { width: 100%; height: 44px; font-size: 1rem; }
+}
+@media (min-width: 641px) and (max-width: 1024px) {
+  .sb { width: 200px; }
+  .game-card { padding: 24px 16px; }
+  #mj-board { grid-template-columns: repeat(8, 1fr); }
+}
+@media (max-width: 768px) {
+
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  #hdr { height: 38px; padding: 2px 10px; }
+  .tab { padding: 8px 10px; }
+}
+#game-area { width: 100%; overflow-x: auto; justify-content: center; }
+#sol-tableau > div > div { transform: scale(0.9); transform-origin: top left; }
+.mj-tile { width: auto; min-width: 50px; }
+.sudoku-grid {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(32px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 3px solid var(--accent);
+  border-radius: 4px;
+  overflow-x: auto;
+}
+.sudoku-cell input { width: 100%; height: 44px; text-align: center; font-size: 1rem; }
+@media (max-width: 560px) {
+  .sudoku-cell input { height: 38px; font-size: 0.8rem; }
+}
+#ttt-grid { display: grid; grid-template-columns: repeat(3, minmax(70px, 100px)); gap: 8px; justify-content: center; }
+#vier-grid { display: grid; grid-template-columns: repeat(7, minmax(38px, 60px)); }
+
+
+
+
+#panels, .panel, .panel.on {
+  height: 100%;
+  width: 100%;
+}
+#p-tagebuch {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+}
+
+#p-tagebuch.on { display: flex !important; flex-direction: column !important; }
+#p-tagebuch #tb-list { flex: 1 1 0; overflow-y: auto; min-height: 0; }
 </style>
 </head>
 <body>
@@ -314,9 +384,10 @@ input[type=text],input[type=time],input[type=date],textarea{
   <button class="tab" onclick="showTab('musik')">🎵 Musik</button>
   <button class="tab" onclick="showTab('radio')">📻 Radio</button>
   <button class="tab" onclick="showTab('bilder')">🖼️ Bilder</button>
-  <button class="tab" onclick="showTab('spiele')">🎮 Spiele</button>
+  
   <button class="tab" onclick="showTab('uebersetzer')">🌍 Übersetzer</button>
   <button class="tab" onclick="showTab('tagebuch')">📔 Tagebuch</button>
+  <button class="tab" onclick="showTab('schmerz')">🩺 Schmerztagebuch</button>
 
 </div>
 
@@ -620,7 +691,7 @@ input[type=text],input[type=time],input[type=date],textarea{
 
 <!-- NOTIZEN -->
 <div class="panel" id="p-notizen">
-  <div class="panel-row">
+  <div class="panel-row" style="padding-bottom:80px;">
     <div class="sb">
       <button class="sb-btn active" onclick="newNote()" style="font-weight:700;">✏️ NEUE NOTIZ</button>
       <div class="sb-sec">NOTIZEN</div>
@@ -852,32 +923,6 @@ input[type=text],input[type=time],input[type=date],textarea{
   </div>
 </div>
 
-<!-- SPIELE -->
-<div class="panel" id="p-spiele" style="flex-direction:column;">
-  <!-- SPIELE MENÜ -->
-  <div id="spiele-menu" style="flex:1;overflow-y:auto;padding:20px;">
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;max-width:900px;">
-      <div class="game-card" onclick="openGame('rechner')"><div class="game-icon">🔢</div><div class="game-name">Rechner</div><div style="font-size:.65rem;color:var(--muted);margin-top:4px;">Wissenschaftlich</div></div>
-      <div class="game-card" onclick="openGame('sol')"><div class="game-icon">♠️</div><div class="game-name">Solitär</div><div style="font-size:.65rem;color:var(--muted);margin-top:4px;">Klassisch</div></div>
-      <div class="game-card" onclick="openGame('mahjong')"><div class="game-icon">🀄</div><div class="game-name">Mahjong</div><div style="font-size:.65rem;color:var(--muted);margin-top:4px;">Shanghai</div></div>
-      <div class="game-card" onclick="openGame('sudoku')"><div class="game-icon">🔢</div><div class="game-name">Sudoku</div><div style="font-size:.65rem;color:var(--muted);margin-top:4px;">4 Schwierigkeiten</div></div>
-      <div class="game-card" onclick="openGame('memory')"><div class="game-icon">🃏</div><div class="game-name">Memory</div><div style="font-size:.65rem;color:var(--muted);margin-top:4px;">Meerestiere</div></div>
-      <div class="game-card" onclick="openGame('ttt')"><div class="game-icon">⭕</div><div class="game-name">Tic Tac Toe</div><div style="font-size:.65rem;color:var(--muted);margin-top:4px;">Gegen PC</div></div>
-      <div class="game-card" onclick="openGame('vier')"><div class="game-icon">🔴</div><div class="game-name">4 Gewinnt</div><div style="font-size:.65rem;color:var(--muted);margin-top:4px;">Gegen PC</div></div>
-    </div>
-  </div>
-  <!-- VOLLBILD SPIEL -->
-  <div id="spiele-fullscreen" style="display:none;flex:1;flex-direction:column;overflow:hidden;">
-    <div style="background:var(--surface);border-bottom:1px solid var(--border);
-      padding:8px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0;">
-      <button onclick="closeGame()" class="t-btn">← Zurück</button>
-      <span id="game-title" style="font-size:.85rem;font-weight:700;color:var(--accent);"></span>
-      <div id="game-controls" style="margin-left:auto;display:flex;gap:6px;"></div>
-    </div>
-    <div id="game-area" style="flex:1;overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:16px;"></div>
-  </div>
-</div>
-
 <!-- AQUARIUM -->
 <div class="panel" id="p-aquarium">
   <div class="content">
@@ -979,7 +1024,7 @@ input[type=text],input[type=time],input[type=date],textarea{
             <div style="display:flex;gap:4px;">
               <button onclick="transCopy()" class="t-btn" style="font-size:.65rem;padding:3px 8px;">📋 Kopieren</button>
               <button onclick="transInReader()" class="t-btn" style="font-size:.65rem;padding:3px 8px;">📖 Im Reader</button>
-              <button onclick="document.getElementById('trans-out').textContent='Übersetzung erscheint hier...';" class="t-btn" style="font-size:.65rem;padding:3px 8px;color:var(--red);">🗑 Leeren</button>
+              <button onclick="setText('trans-out','Übersetzung erscheint hier...');" class="t-btn" style="font-size:.65rem;padding:3px 8px;color:var(--red);">🗑 Leeren</button>
             </div>
           </div>
           <div id="trans-out"
@@ -1101,52 +1146,40 @@ input[type=text],input[type=time],input[type=date],textarea{
 </div>
 
 <!-- TAGEBUCH -->
-<div class="panel" id="p-tagebuch">
-  <div class="panel-row">
-    <div class="sb">
-      <div class="sb-sec">NEUER EINTRAG</div>
-      <div style="font-size:.62rem;color:var(--muted);margin-bottom:6px;">Stimmung wählen:</div>
-      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;">
-        <button onclick="tbSetMood('😊')" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:6px 10px;cursor:pointer;font-size:1.2rem;" title="Gut">😊</button>
-        <button onclick="tbSetMood('😐')" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:6px 10px;cursor:pointer;font-size:1.2rem;" title="Neutral">😐</button>
-        <button onclick="tbSetMood('😔')" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:6px 10px;cursor:pointer;font-size:1.2rem;" title="Traurig">😔</button>
-        <button onclick="tbSetMood('😤')" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:6px 10px;cursor:pointer;font-size:1.2rem;" title="Genervt">😤</button>
-        <button onclick="tbSetMood('😰')" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:6px 10px;cursor:pointer;font-size:1.2rem;" title="Ängstlich">😰</button>
-        <button onclick="tbSetMood('🤒')" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:6px 10px;cursor:pointer;font-size:1.2rem;" title="Krank">🤒</button>
-        <button onclick="tbSetMood('💪')" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:6px 10px;cursor:pointer;font-size:1.2rem;" title="Stark">💪</button>
-        <button onclick="tbSetMood('😴')" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:6px 10px;cursor:pointer;font-size:1.2rem;" title="Müde">😴</button>
+<!-- TAGEBUCH -->
+<!-- TAGEBUCH – volle Höhe & Breite -->
+<div id="p-tagebuch" class="panel" style="display:flex;flex-direction:column;">
+  <div style="display:flex;flex-direction:column;flex:1;min-height:0;">
+    <div style="background:var(--surface);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;flex-shrink:0;">
+      <div style="display:flex;gap:4px;flex-wrap:wrap;">
+        <button onclick="tbSetMood('😊')" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:6px 10px;font-size:1.2rem;cursor:pointer;">😊</button>
+        <button onclick="tbSetMood('😐')" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:6px 10px;font-size:1.2rem;cursor:pointer;">😐</button>
+        <button onclick="tbSetMood('😔')" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:6px 10px;font-size:1.2rem;cursor:pointer;">😔</button>
+        <button onclick="tbSetMood('😤')" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:6px 10px;font-size:1.2rem;cursor:pointer;">😤</button>
+        <button onclick="tbSetMood('😰')" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:6px 10px;font-size:1.2rem;cursor:pointer;">😰</button>
+        <button onclick="tbSetMood('🤒')" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:6px 10px;font-size:1.2rem;cursor:pointer;">🤒</button>
+        <button onclick="tbSetMood('💪')" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:6px 10px;font-size:1.2rem;cursor:pointer;">💪</button>
+        <button onclick="tbSetMood('😴')" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:6px 10px;font-size:1.2rem;cursor:pointer;">😴</button>
       </div>
-      <div id="tb-mood-sel" style="font-size:.72rem;color:var(--muted);margin-bottom:10px;">Keine Stimmung gewählt</div>
-      <button class="sb-btn active" onclick="tbDiktieren()" style="font-weight:700;margin-bottom:4px;padding:10px;">🎤 Diktieren</button>
-      <button class="sb-btn" onclick="tbSpeichern()" style="color:var(--green);padding:10px;">💾 Eintrag speichern</button>
-      <div class="sb-sec" style="margin-top:10px;">FILTER</div>
-      <select class="sb-sel" id="tb-filter" onchange="renderTagebuch()">
-        <option value="">Alle Einträge</option>
-        <option value="😊">😊 Gut</option>
-        <option value="😔">😔 Traurig</option>
-        <option value="🤒">🤒 Krank</option>
-        <option value="💪">💪 Stark</option>
-        <option value="😤">😤 Genervt</option>
-        <option value="😴">😴 Müde</option>
-        <option value="😰">😰 Ängstlich</option>
+      <div id="tb-mood-sel" style="font-size:.72rem;color:var(--muted);"></div>
+      <div style="flex:1;min-width:10px;"></div>
+      <button class="t-btn" onclick="tbDiktieren()" style="font-weight:700;">🎤 Diktieren</button>
+      <button class="t-btn play" onclick="tbSpeichern()">💾 Speichern</button>
+      <select id="tb-filter" onchange="renderTagebuch()" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:6px;font-size:.7rem;">
+        <option value="">Alle</option>
+        <option value="😊">😊</option><option value="😔">😔</option>
+        <option value="🤒">🤒</option><option value="💪">💪</option>
+        <option value="😤">😤</option><option value="😴">😴</option>
       </select>
-      <div class="sb-sec" style="margin-top:10px;">EXPORT</div>
-      <button class="sb-btn" onclick="tbExport()" style="color:var(--accent);">📤 Als TXT exportieren</button>
+      <button class="t-btn" onclick="tbExport()">📤</button>
     </div>
-    <div class="content" style="display:flex;flex-direction:column;overflow:hidden;">
-      <div style="background:var(--surface);border-bottom:1px solid var(--border);padding:12px 14px;flex-shrink:0;">
-        <div id="tb-mood-display" style="font-size:1.2rem;display:inline;vertical-align:middle;margin-right:8px;"></div>
-        <textarea id="tb-text" placeholder="Schreib hier deinen Tagebucheintrag... oder nutze 🎤 Diktieren um zu sprechen."
-          style="width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);
-          font-size:calc(.9rem * var(--font-scale));padding:12px;border-radius:6px;
-          resize:none;height:130px;outline:none;font-family:'Lato',sans-serif;line-height:1.7;margin-top:8px;display:block;"
-          onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
-      </div>
-      <div id="tb-list" style="flex:1;overflow-y:auto;padding:12px;"></div>
+    <div style="background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px;flex-shrink:0;">
+      <span id="tb-mood-display" style="font-size:1.2rem;margin-right:8px;"></span>
+      <textarea id="tb-text" placeholder="Tagebucheintrag..." style="width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:calc(18px * var(--font-scale));padding:12px;border-radius:6px;resize:vertical;min-height:120px;outline:none;font-family:Georgia,serif;line-height:1.7;margin-top:8px;display:block;box-sizing:border-box;"></textarea>
     </div>
+    <div id="tb-list" style="flex:1;overflow-y:auto;padding:16px;min-height:0;"></div>
   </div>
 </div>
-
 <!-- SOS MODAL -->
 <div class="modal" id="sos-modal">
   <div class="modal-box" style="max-width:420px;border:2px solid var(--red);">
@@ -1195,7 +1228,7 @@ let currentRadio = null;
 // TABS
 // ================================================================
 const TABS = ['dashboard','reader','diktat','editor','notizen','todo','medi','termine',
-              'adressen','musik','radio','bilder','spiele','aquarium','lesezeichen','uebersetzer','tagebuch'];
+              'adressen','musik','radio','bilder','aquarium','lesezeichen','uebersetzer','tagebuch','schmerz'];
 
 function showTab(id) {
   TABS.forEach(t => {
@@ -1218,13 +1251,31 @@ function showTab(id) {
   if (id === 'lesezeichen') renderBookmarks();
   if (id === 'termine') { showKalender('monat'); }
   if (id === 'aquarium') initAquarium();
-  if (id === 'tagebuch') renderTagebuch();
+  if (id === 'tagebuch') {
+    renderTagebuch();
+    requestAnimationFrame(() => {
+      const panels = document.getElementById('panels');
+      const tb = document.getElementById('p-tagebuch');
+      const tbList = document.getElementById('tb-list');
+      if (!panels || !tb || !tbList) return;
+      const panelsH = panels.getBoundingClientRect().height;
+      let usedH = 0;
+      Array.from(tb.children).forEach(child => {
+        if (child !== tbList) usedH += child.getBoundingClientRect().height;
+      });
+      tbList.style.height = (panelsH - usedH) + 'px';
+      tbList.style.overflowY = 'auto';
+      tbList.style.flex = 'none';
+    });
+  }
+  if (id === 'schmerz') renderSzVerlauf();
+  if (id === 'spiele') { window.dispatchEvent(new Event('resize')); }
 }
 
 // ================================================================
 // STATUS & UTILS
 // ================================================================
-function status(t) { document.getElementById('hdr-status').textContent = t; }
+function status(t) { const el=document.getElementById('hdr-status'); if(el) el.textContent=t; }
 function showModal(id) { document.getElementById(id).classList.add('show'); }
 function hideModal(id) { document.getElementById(id).classList.remove('show'); }
 function save(key, data) { try { localStorage.setItem(key, JSON.stringify(data)); } catch(e) {} }
@@ -1344,9 +1395,9 @@ function loadText(text, name) {
     if ((i+1)%4===0) { paper.appendChild(document.createElement('br')); paper.appendChild(document.createElement('br')); }
   });
   document.getElementById('file-info').style.display='block';
-  document.getElementById('file-info').textContent='📄 '+name;
-  document.getElementById('curbar').textContent = sentences[0]||'...';
-  document.getElementById('word-info').textContent = text.split(/\s+/).length.toLocaleString()+' Wörter';
+  setText('file-info','📄 '+name);
+  setText('curbar',sentences[0]||'...');
+  setText('word-info',text.split(/s+/).length.toLocaleString()+' Wörter');
   updateProg(); status('Geladen: '+name);
 }
 
@@ -1392,7 +1443,7 @@ function togglePlay() { isPlaying ? pauseRead() : startRead(); }
 function startRead() {
   if (!sentences.length) return;
   isPlaying = true;
-  document.getElementById('play-btn').textContent = '⏸ PAUSE';
+  setText('play-btn','⏸ PAUSE');
   document.getElementById('play-btn').classList.add('play');
   status('Liest vor...'); readNext();
 }
@@ -1407,35 +1458,35 @@ function readNext() {
   utt.onend = () => { if(isPlaying){ curIdx++; updateProg(); readNext(); }};
   utt.onerror = e => { if(e.error!=='interrupted'){ curIdx++; if(isPlaying) readNext(); }};
   highlight(curIdx);
-  document.getElementById('curbar').textContent = sentences[curIdx];
+  setText('curbar',sentences[curIdx]);
   synth.speak(utt);
 }
 
 function pauseRead() {
   isPlaying = false; synth.cancel();
-  document.getElementById('play-btn').textContent = '▶ VORLESEN';
+  setText('play-btn','▶ VORLESEN');
   document.getElementById('play-btn').classList.remove('play');
   status('Pausiert');
 }
 
 function stopRead() {
   isPlaying = false; synth.cancel(); curIdx = 0;
-  document.getElementById('play-btn').textContent = '▶ VORLESEN';
+  setText('play-btn','▶ VORLESEN');
   document.getElementById('play-btn').classList.remove('play');
   clearHL(); updateProg(); status('Bereit');
 }
 
 function doneRead() {
   isPlaying = false;
-  document.getElementById('play-btn').textContent = '▶ VORLESEN';
+  setText('play-btn','▶ VORLESEN');
   document.getElementById('play-btn').classList.remove('play');
-  document.getElementById('curbar').textContent = '✓ Fertig!';
+  setText('curbar','✓ Fertig!');
   status('Fertig');
 }
 
 function prevSent() { const w=isPlaying; pauseRead(); curIdx=Math.max(0,curIdx-1); highlight(curIdx); if(w){isPlaying=true;readNext();} }
 function nextSent() { const w=isPlaying; pauseRead(); curIdx=Math.min(sentences.length-1,curIdx+1); highlight(curIdx); if(w){isPlaying=true;readNext();} }
-function jumpTo(i) { const w=isPlaying; pauseRead(); curIdx=i; highlight(i); document.getElementById('curbar').textContent=sentences[i]; if(w){isPlaying=true;readNext();} }
+function jumpTo(i) { const w=isPlaying; pauseRead(); curIdx=i; highlight(i); setText('curbar',sentences[i]); if(w){isPlaying=true;readNext();} }
 
 function highlight(i) {
   clearHL();
@@ -1445,13 +1496,15 @@ function highlight(i) {
 }
 function clearHL() { document.querySelectorAll('.s').forEach(s=>s.classList.remove('reading','done')); }
 
+function setText(id, val) { const el=document.getElementById(id); if(el) el.textContent=val; }
+
 function updateProg() {
   const n=sentences.length, pct=n?Math.round(curIdx/n*100):0;
-  document.getElementById('main-prog').style.width=pct+'%';
-  document.getElementById('sb-prog').style.width=pct+'%';
-  document.getElementById('prog-txt').textContent=curIdx+'/'+n;
-  document.getElementById('pct-txt').textContent=pct+'%';
-  document.getElementById('prog-info').textContent=n?curIdx+' / '+n+' Absätze':'Kein Dokument';
+  const mp=document.getElementById('main-prog'); if(mp) mp.style.width=pct+'%';
+  const sp=document.getElementById('sb-prog'); if(sp) sp.style.width=pct+'%';
+  const pt=document.getElementById('prog-txt'); if(pt) pt.textContent=curIdx+'/'+n;
+  const pc=document.getElementById('pct-txt'); if(pc) pc.textContent=pct+'%';
+  const pi=document.getElementById('prog-info'); if(pi) pi.textContent=n?curIdx+' / '+n+' Absätze':'Kein Dokument';
 }
 
 function addBookmark() {
@@ -1492,7 +1545,7 @@ function clearReader() {
   stopRead(); fullText=''; sentences=[]; curIdx=0;
   document.getElementById('paper').innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);"><div style="font-size:3rem;opacity:.25;">📖</div><div style="margin-top:10px;">Datei links öffnen</div></div>';
   document.getElementById('file-info').style.display='none';
-  document.getElementById('curbar').textContent='Lade eine Datei...';
+  setText('curbar','Lade eine Datei...');
   updateProg(); status('Bereit');
 }
 
@@ -1544,22 +1597,22 @@ function _startDiktInner() {
       const r=document.createRange(),s=window.getSelection();
       r.selectNodeContents(ta);r.collapse(false);s.removeAllRanges();s.addRange(r);
     }
-    document.getElementById('dik-interim').textContent=interim;
+    setText('dik-interim',interim);
   };
-  recognition.onerror = e => { if(e.error!=='no-speech') document.getElementById('dik-status').textContent='Fehler: '+e.error; };
-  recognition.onend = () => { document.getElementById('dik-interim').textContent=''; if(dictating&&document.getElementById('p-diktat').classList.contains('on')) try{recognition.start();}catch(e){} };
+  recognition.onerror = e => { if(e.error!=='no-speech') setText('dik-status','Fehler: '+e.error); };
+  recognition.onend = () => { setText('dik-interim',''); if(dictating&&document.getElementById('p-diktat').classList.contains('on')) try{recognition.start();}catch(e){} };
   dictating=true;
-  document.getElementById('dik-btn').textContent='⏹ STOPPEN';
+  setText('dik-btn','⏹ STOPPEN');
   document.getElementById('dik-btn').style.background='var(--red)';
-  document.getElementById('dik-status').textContent='🔴 Aufnahme...';
+  setText('dik-status','🔴 Aufnahme...');
   try{recognition.start();}catch(e){}
 }
 
 function stopDikt() {
   dictating=false; if(recognition)recognition.stop();
-  document.getElementById('dik-btn').textContent='🎤 DIKTIEREN';
+  setText('dik-btn','🎤 DIKTIEREN');
   document.getElementById('dik-btn').style.background='';
-  document.getElementById('dik-status').textContent='Bereit';
+  setText('dik-status','Bereit');
 }
 
 function diktVorlesen() {
@@ -1587,13 +1640,13 @@ function diktInNotiz() {
   allNotes.unshift(note); save('hf_notes',allNotes); showTab('notizen'); status('Als Notiz gespeichert ✓');
 }
 
-function diktLeeren() { stopDikt(); document.getElementById('dik-paper').innerText=''; document.getElementById('dik-interim').textContent=''; }
+function diktLeeren() { stopDikt(); document.getElementById('dik-paper').innerText=''; setText('dik-interim',''); }
 
 // ================================================================
 // EDITOR
 // ================================================================
 function edFmt(cmd, val) { document.getElementById('ed-paper').focus(); document.execCommand(cmd,false,val||null); }
-function edNew() { if(confirm('Neues Dokument?')){ document.getElementById('ed-paper').innerHTML='<p>Hier tippen...</p>'; document.getElementById('ed-status').textContent=''; }}
+function edNew() { if(confirm('Neues Dokument?')){ document.getElementById('ed-paper').innerHTML='<p>Hier tippen...</p>'; setText('ed-status',''); }}
 function edLoad(file) {
   if(!file)return;
   const r=new FileReader();
@@ -1601,7 +1654,7 @@ function edLoad(file) {
     const ext=file.name.split('.').pop().toLowerCase();
     if(ext==='html'||ext==='htm') document.getElementById('ed-paper').innerHTML=e.target.result;
     else document.getElementById('ed-paper').innerHTML=e.target.result.split('\n').map(l=>l.trim()?'<p>'+l+'</p>':'<p><br></p>').join('');
-    document.getElementById('ed-status').textContent=file.name+' geladen';
+    setText('ed-status',file.name+' geladen');
   };
   r.readAsText(file,'UTF-8');
 }
@@ -1614,7 +1667,7 @@ function edSave(fmt) {
     const html=`<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><style>body{font-family:Georgia,serif;font-size:12pt;line-height:1.6;margin:25mm 20mm;color:#111;}h1{font-size:20pt;}h2{font-size:16pt;}h3{font-size:14pt;}@media print{@page{margin:25mm 20mm;}}</style></head><body>${paper.innerHTML}</body></html>`;
     const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));a.download='dok_'+d+'.html';a.click();
   }
-  document.getElementById('ed-status').textContent='✓ Gespeichert';
+  setText('ed-status','✓ Gespeichert');
 }
 function edPrint() {
   const paper=document.getElementById('ed-paper');
@@ -1627,7 +1680,7 @@ let edTimer=null;
 function edAutoSave() {
   clearTimeout(edTimer);
   edTimer=setTimeout(()=>{
-    try{ localStorage.setItem('hf_editor',document.getElementById('ed-paper').innerHTML); document.getElementById('ed-status').textContent='✓ Auto-gespeichert'; }catch(e){}
+    try{ localStorage.setItem('hf_editor',document.getElementById('ed-paper').innerHTML); setText('ed-status','✓ Auto-gespeichert'); }catch(e){}
   },1500);
 }
 
@@ -1651,7 +1704,7 @@ function newNote() {
   allNotes.unshift(note); save('hf_notes',allNotes); curNoteId=note.id;
   document.getElementById('note-ti').value='Neue Notiz';
   document.getElementById('note-bo').value='';
-  document.getElementById('note-status').textContent='✓ Gespeichert';
+  setText('note-status','✓ Gespeichert');
   renderNotes(); document.getElementById('note-ti').focus();
   document.getElementById('note-ti').select();
 }
@@ -1669,7 +1722,7 @@ function saveNote() {
   allNotes[idx].title=document.getElementById('note-ti').value||'Ohne Titel';
   allNotes[idx].body=document.getElementById('note-bo').value;
   save('hf_notes',allNotes);
-  document.getElementById('note-status').textContent='✓ Gespeichert';
+  setText('note-status','✓ Gespeichert');
   renderNotes();
 }
 
@@ -1677,7 +1730,7 @@ function delNote() {
   if(!curNoteId||!confirm('Löschen?'))return;
   allNotes=allNotes.filter(n=>n.id!==curNoteId); save('hf_notes',allNotes); curNoteId=null;
   document.getElementById('note-ti').value=''; document.getElementById('note-bo').value='';
-  document.getElementById('note-status').textContent=''; renderNotes();
+  setText('note-status',''); renderNotes();
 }
 
 function exportNote(fmt) {
@@ -1699,15 +1752,15 @@ function renderTodos() {
   const open = todos.filter(t=>!t.done);
   const done = todos.filter(t=>t.done);
   
-  document.getElementById('todo-open-count').textContent = open.length;
-  document.getElementById('todo-done-count').textContent = done.length;
+  setText('todo-open-count', open.length);
+  setText('todo-done-count', done.length);
   
   if (!open.length) {
     openEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:.8rem;">Nichts zu tun 🎉</div>';
   } else {
     openEl.innerHTML = open.map(t=>`
       <div class="todo-item">
-        <span style="flex:1;font-size:calc(.82rem * var(--font-scale));">${t.text}
+        <span style="flex:1;font-size:calc(1rem * var(--font-scale));">${t.text}
           ${t.postponed?`<span style="font-size:.6rem;color:var(--gold);margin-left:5px;">📅 ${t.postponed}</span>`:''}
         </span>
         <button onclick="doneTodo(${t.id})" title="Als erledigt markieren"
@@ -1725,7 +1778,7 @@ function renderTodos() {
   } else {
     doneEl.innerHTML = done.map(t=>`
       <div class="todo-item" style="opacity:.6;">
-        <span style="flex:1;font-size:calc(.82rem * var(--font-scale));text-decoration:line-through;color:var(--muted);">${t.text}</span>
+        <span style="flex:1;font-size:calc(1rem * var(--font-scale));text-decoration:line-through;color:var(--muted);">${t.text}</span>
         <button onclick="undoneTodo(${t.id})" title="Zurück zu offen"
           style="background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;
           font-size:.65rem;padding:3px 7px;border-radius:3px;white-space:nowrap;">↩ Zurück</button>
@@ -2009,17 +2062,17 @@ function mPlay(i) {
   mIdx=i; maudio.src=mPlaylist[i].url;
   maudio.volume=parseFloat(document.getElementById('m-vol').value);
   maudio.play(); mPlaying=true;
-  document.getElementById('m-pbtn').textContent='⏸';
-  document.getElementById('m-now').textContent='🎵 '+mPlaylist[i].name;
+  setText('m-pbtn','⏸');
+  setText('m-now','🎵 '+mPlaylist[i].name);
   renderMusic();
 }
-function mToggle() { if(!mPlaylist.length)return; if(mPlaying){maudio.pause();mPlaying=false;document.getElementById('m-pbtn').textContent='▶';}else{maudio.play();mPlaying=true;document.getElementById('m-pbtn').textContent='⏸';} }
+function mToggle() { if(!mPlaylist.length)return; if(mPlaying){maudio.pause();mPlaying=false;setText('m-pbtn','▶');}else{maudio.play();mPlaying=true;setText('m-pbtn','⏸');} }
 function mPrev() { if(mPlaylist.length) mPlay((mIdx-1+mPlaylist.length)%mPlaylist.length); }
 function mNext() { if(mPlaylist.length) mPlay((mIdx+1)%mPlaylist.length); }
 function mEnded() {
   if(document.getElementById('m-repeat').checked){maudio.play();return;}
   if(document.getElementById('m-shuffle').checked){mPlay(Math.floor(Math.random()*mPlaylist.length));return;}
-  if(mIdx<mPlaylist.length-1) mPlay(mIdx+1); else{mPlaying=false;document.getElementById('m-pbtn').textContent='▶';}
+  if(mIdx<mPlaylist.length-1) mPlay(mIdx+1); else{mPlaying=false;setText('m-pbtn','▶');}
 }
 function mSeek(v) { if(maudio.duration) maudio.currentTime=v/100*maudio.duration; }
 function mVol(v) { maudio.volume=v; }
@@ -2027,9 +2080,9 @@ function mUpdate() {
   if(!maudio.duration)return;
   document.getElementById('m-prog').value=maudio.currentTime/maudio.duration*100;
   const f=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
-  document.getElementById('m-time').textContent=f(maudio.currentTime)+' / '+f(maudio.duration);
+  setText('m-time',f(maudio.currentTime)+' / '+f(maudio.duration));
 }
-function clearMusic() { mPlaylist=[]; mIdx=0; maudio.pause(); mPlaying=false; renderMusic(); document.getElementById('m-now').textContent='Kein Titel'; document.getElementById('m-pbtn').textContent='▶'; }
+function clearMusic() { mPlaylist=[]; mIdx=0; maudio.pause(); mPlaying=false; renderMusic(); setText('m-now','Kein Titel'); setText('m-pbtn','▶'); }
 
 // ================================================================
 // RADIO
@@ -2274,7 +2327,7 @@ function toggleDia() {
   }
 }
 
-function clearBilder() { bilder=[]; bildIdx=0; if(diaTimer){clearInterval(diaTimer);diaTimer=null;document.getElementById('dia-btn').textContent='▶ Diashow starten';} document.getElementById('bild-main').style.display='none'; document.getElementById('bild-empty').style.display='block'; document.getElementById('bild-thumbs').innerHTML=''; }
+function clearBilder() { bilder=[]; bildIdx=0; if(diaTimer){clearInterval(diaTimer);diaTimer=null;setText('dia-btn','▶ Diashow starten');} document.getElementById('bild-main').style.display='none'; document.getElementById('bild-empty').style.display='block'; document.getElementById('bild-thumbs').innerHTML=''; }
 
 // ================================================================
 // SPIELE
@@ -2285,7 +2338,7 @@ function openGame(id) {
   fs.style.display='flex';
   const titles = {rechner:'🔢 Rechner',sol:'♠️ Solitär',mahjong:'🀄 Mahjong',
     sudoku:'🔢 Sudoku',memory:'🃏 Memory',ttt:'⭕ Tic Tac Toe',vier:'🔴 4 Gewinnt'};
-  document.getElementById('game-title').textContent = titles[id]||id;
+  setText('game-title',titles[id]||id);
   document.getElementById('game-controls').innerHTML = '';
   startGame(id);
 }
@@ -2476,8 +2529,8 @@ function memoryHTML(){
   return `<div>
     <div style="font-size:1.2rem;font-weight:700;color:var(--accent);margin-bottom:12px;">🃏 Memory</div>
     <div id="mem-msg" style="font-size:.85rem;color:var(--muted);margin-bottom:8px;">Finde alle Paare!</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:320px;">
-      ${memCards.map(c=>`<button onclick="memClick(${c.id})" id="mem-${c.id}" style="width:70px;height:70px;background:var(--surface2);border:2px solid var(--border);border-radius:8px;font-size:1.8rem;cursor:pointer;color:#fff;font-weight:900;font-size:1.5rem;letter-spacing:1px;box-shadow:0 2px 6px rgba(0,0,0,.3);">?</button>`).join('')}
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:8px;max-width:100%;">
+      ${memCards.map(c=>`<button onclick="memClick(${c.id})" id="mem-${c.id}" style="width:100%;aspect-ratio:1;background:var(--surface2);border:2px solid var(--border);border-radius:8px;cursor:pointer;font-size:1.5rem;font-weight:900;box-shadow:0 2px 6px rgba(0,0,0,.3);">?</button>`).join('')}
     </div>
     <button onclick="startGame('memory')" style="margin-top:10px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:.78rem;padding:7px 14px;cursor:pointer;border-radius:4px;">Neu starten</button>
   </div>`;
@@ -2649,6 +2702,7 @@ setTimeout(scheduleMediNotifs, 2000);
 // Erstes Panel korrekt anzeigen
 document.getElementById('p-dashboard').style.display='flex';
 initDashboard();
+renderRadio();
 
 // ================================================================
 // KALENDER
@@ -2670,7 +2724,7 @@ function kalToday() { kalYear=new Date().getFullYear(); kalMonth=new Date().getM
 function renderKalender() {
   termine = load('hf_termine', []);
   const monate = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
-  document.getElementById('kal-title').textContent = monate[kalMonth] + ' ' + kalYear;
+  setText('kal-title',monate[kalMonth]+' '+kalYear);
   
   const first = new Date(kalYear, kalMonth, 1);
   const last  = new Date(kalYear, kalMonth+1, 0);
@@ -2728,19 +2782,19 @@ function renderTermine() {
 let solDeck=[], solStock=[], solWaste=[], solFoundation=[[],[],[],[]], solTableau=[[],[],[],[],[],[],[]];
 
 function solHTML() {
-  return `<div id="sol-game" style="background:#1a4a2a;padding:16px;border-radius:10px;max-width:700px;">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-      <span style="font-size:1.1rem;font-weight:700;color:#fff;">♠️ Solitär</span>
-      <button onclick="initSol()" style="background:#2d6a3f;border:none;color:#fff;font-size:.72rem;padding:5px 12px;cursor:pointer;border-radius:4px;">Neu</button>
-      <span id="sol-msg" style="font-size:.72rem;color:#90ee90;margin-left:auto;"></span>
+  return `<div id="sol-game" style="background:#1a4a2a; padding:16px; border-radius:10px; width:100%; overflow-x:auto;">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px; flex-wrap:wrap;">
+      <span style="font-size:1.1rem; font-weight:700; color:#fff;">♠️ Solitär</span>
+      <button onclick="initSol()" style="background:#2d6a3f; border:none; color:#fff; font-size:.72rem; padding:5px 12px; border-radius:4px;">Neu</button>
+      <span id="sol-msg" style="font-size:.72rem; color:#90ee90; margin-left:auto;"></span>
     </div>
-    <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
-      <div id="sol-stock" onclick="solDraw()" style="width:60px;height:84px;border:2px dashed rgba(255,255,255,.3);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.5rem;">🂠</div>
-      <div id="sol-waste" style="width:60px;height:84px;"></div>
+    <div style="display:flex; gap:clamp(4px,2vw,10px); margin-bottom:12px; flex-wrap:wrap;">
+      <div id="sol-stock" onclick="solDraw()" style="width:clamp(45px,10vw,70px); height:clamp(63px,14vw,98px); border:2px dashed rgba(255,255,255,.3); border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.5rem;">🂠</div>
+      <div id="sol-waste" style="width:clamp(45px,10vw,70px); height:clamp(63px,14vw,98px);"></div>
       <div style="flex:1;"></div>
-      ${[0,1,2,3].map(i=>`<div id="sol-f${i}" ondragover="event.preventDefault()" ondrop="solDropF(${i},event)" style="width:60px;height:84px;border:2px dashed rgba(255,255,255,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:rgba(255,255,255,.3);">${['♥','♦','♣','♠'][i]}</div>`).join('')}
+      ${[0,1,2,3].map(i=>`<div id="sol-f${i}" ondragover="event.preventDefault()" ondrop="solDropF(${i},event)" style="width:clamp(45px,10vw,70px); height:clamp(63px,14vw,98px); border:2px dashed rgba(255,255,255,.3); border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:clamp(1rem,4vw,1.2rem); color:rgba(255,255,255,.3);">${['♥','♦','♣','♠'][i]}</div>`).join('')}
     </div>
-    <div id="sol-tableau" style="display:flex;gap:8px;align-items:flex-start;min-height:300px;"></div>
+    <div id="sol-tableau" style="display:flex; gap:clamp(4px,1.5vw,12px); align-items:flex-start; min-height:300px; overflow-x:auto; padding-bottom:16px;"></div>
   </div>`;
 }
 
@@ -2815,12 +2869,12 @@ function solRender() {
 }
 
 function solCardEl(c,src,idx) {
-  if(!c.face) return `<div style="width:60px;height:84px;background:#2851a3;border-radius:6px;border:1px solid rgba(255,255,255,.2);"></div>`;
+  if(!c.face) return `<div style="width:clamp(45px,10vw,70px); height:clamp(63px,14vw,98px); background:#2851a3; border-radius:6px; border:1px solid rgba(255,255,255,.2);"></div>`;
   return `<div draggable="true" ondragstart="solDragStart('${src}','${idx}',event)" 
-    style="width:60px;height:84px;background:#fff;border-radius:6px;border:1px solid #ccc;
-    display:flex;flex-direction:column;padding:4px;cursor:grab;font-size:.9rem;">
-    <div style="color:${c.red?'#c00':'#111'};font-weight:700;font-size:.8rem;">${c.s}${c.r}</div>
-    <div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:${c.red?'#c00':'#111'};">${c.s}</div>
+    style="width:clamp(45px,10vw,70px); height:clamp(63px,14vw,98px); background:#fff; border-radius:6px; border:1px solid #ccc;
+    display:flex; flex-direction:column; padding:4px; cursor:grab; font-size:clamp(0.7rem,3vw,0.9rem);">
+    <div style="color:${c.red?'#c00':'#111'}; font-weight:700; font-size:clamp(0.6rem,2.5vw,0.8rem);">${c.s}${c.r}</div>
+    <div style="flex:1; display:flex; align-items:center; justify-content:center; font-size:clamp(1.2rem,5vw,1.4rem); color:${c.red?'#c00':'#111'};">${c.s}</div>
   </div>`;
 }
 
@@ -2907,7 +2961,7 @@ let transRecognition = null, transListening = false;
 // ================================================================
 function transAutoDetect() {
   const text = document.getElementById('trans-in').value;
-  document.getElementById('trans-chars').textContent = text.length + ' Zeichen';
+  setText('trans-chars',text.length+' Zeichen');
 }
 
 function transSwap() {
@@ -2920,7 +2974,7 @@ function transSwap() {
   const outText = document.getElementById('trans-out').textContent;
   if (outText && outText !== 'Übersetzung erscheint hier...') {
     document.getElementById('trans-in').value = outText;
-    document.getElementById('trans-out').textContent = inText;
+    setText('trans-out',inText);
   }
 }
 
@@ -2929,7 +2983,7 @@ async function transDoTranslate(text) {
   const to   = document.getElementById('trans-to').value;
   const fromLang = from === 'auto' ? 'auto' : from;
   
-  document.getElementById('trans-status').textContent = '⏳ Übersetze...';
+  setText('trans-status','⏳ Übersetze...');
   document.getElementById('trans-out').innerHTML = '<span style="color:var(--muted);font-style:italic;">Übersetze...</span>';
   
   // Chunks falls Text zu lang
@@ -2953,14 +3007,14 @@ async function transDoTranslate(text) {
         '<div style="color:var(--red);margin-bottom:8px;">⚠️ Direktübersetzung blockiert (CORS bei file://).</div>' +
         '<div style="font-size:.8rem;color:var(--muted);margin-bottom:12px;">Lösung: Text ins Eingabefeld kopieren und als TXT-Datei speichern, dann über "Dokument übersetzen" laden.</div>' +
         '<button onclick="transAlsDatei()" class="t-btn play">📄 Text als Datei übersetzen</button>';
-      document.getElementById('trans-status').textContent = '✗ CORS blockiert';
+      setText('trans-status','✗ CORS blockiert');
       return;
     }
   }
   
   if (fullTranslation.trim()) {
-    document.getElementById('trans-out').textContent = fullTranslation.trim();
-    document.getElementById('trans-status').textContent = '✓ Fertig';
+    setText('trans-out',fullTranslation.trim());
+    setText('trans-status','✓ Fertig');
   }
 }
 
@@ -2987,7 +3041,7 @@ async function translate() {
 async function transOpenFile(file) {
   // Datei lesen und übersetzen — OHNE translate() aufzurufen
   if (!file) return;
-  document.getElementById('trans-status').textContent = '⏳ Lese Datei...';
+  setText('trans-status','⏳ Lese Datei...');
   const ext = file.name.split('.').pop().toLowerCase();
   let text = '';
   try {
@@ -3010,10 +3064,10 @@ async function transOpenFile(file) {
       transAutoDetect();
       await transDoTranslate(t); // Direkt zur Kernfunktion, nicht durch translate()
     } else {
-      document.getElementById('trans-status').textContent = '✗ Kein Text gefunden';
+      setText('trans-status','✗ Kein Text gefunden');
     }
   } catch(e) {
-    document.getElementById('trans-status').textContent = '✗ Fehler: ' + e.message;
+    setText('trans-status','✗ Fehler: '+e.message);
   }
 }
 
@@ -3021,7 +3075,7 @@ function transCopy() {
   const text = document.getElementById('trans-out').textContent;
   if (text && text !== 'Übersetzung erscheint hier...') {
     navigator.clipboard.writeText(text).then(() => {
-      document.getElementById('trans-status').textContent = '✓ Kopiert';
+      setText('trans-status','✓ Kopiert');
     });
   }
 }
@@ -3054,7 +3108,7 @@ function transDiktat() {
   };
   transListening = true;
   transRecognition.start();
-  document.getElementById('trans-status').textContent = '🎤 Sprich jetzt...';
+  setText('trans-status','🎤 Sprich jetzt...');
   transRecognition.onend = () => { transListening = false; };
 }
 
@@ -3071,11 +3125,11 @@ let mjBoard=[], mjSelected=null, mjPairs=0, mjTotal=0;
 
 function mahjongHTML() {
   return `<div style="display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;">
-    <div style="display:flex;gap:8px;align-items:center;">
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
       <span id="mj-info" style="font-size:.8rem;color:var(--muted);">Finde alle Paare!</span>
       <button onclick="initMahjong()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:.72rem;padding:5px 12px;cursor:pointer;border-radius:4px;">Neu</button>
     </div>
-    <div id="mj-board" style="display:grid;grid-template-columns:repeat(12,58px);gap:4px;overflow:auto;max-width:100%;"></div>
+    <div id="mj-board" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,70px));gap:clamp(3px,1vw,8px);justify-content:center;max-width:100%;overflow-x:auto;"></div>
   </div>`;
 }
 
@@ -3543,8 +3597,8 @@ function exportIcal() {
 // ================================================================
 function tbSetMood(mood) {
   tbMood = mood;
-  document.getElementById('tb-mood-sel').textContent = 'Gewählt: ' + mood;
-  document.getElementById('tb-mood-display').textContent = mood;
+  setText('tb-mood-sel', 'Gewählt: ' + mood);
+  setText('tb-mood-display', mood);
 }
 
 let tbRecognition = null, tbDiktating = false;
@@ -3594,8 +3648,8 @@ function tbSpeichern() {
   const taEl = document.getElementById('tb-text');
   if (taEl) { taEl.value = ''; taEl.dispatchEvent(new Event('input')); }
   tbMood = '';
-  document.getElementById('tb-mood-sel').textContent = 'Keine Stimmung gewählt';
-  document.getElementById('tb-mood-display').textContent = '';
+  setText('tb-mood-sel', 'Keine Stimmung gewählt');
+  setText('tb-mood-display', '');
   renderTagebuch();
   status('✓ Tagebucheintrag gespeichert!');
 }
@@ -3702,6 +3756,132 @@ function sosSaveKontaktNeu() {
 }
 
 </script>
+
+<!-- SCHMERZTAGEBUCH PANEL -->
+<script>
+// Schmerztagebuch direkt nach dem Hauptscript
+document.getElementById('panels').insertAdjacentHTML('beforeend', `
+<div class="panel" id="p-schmerz" style="flex-direction:column;overflow-y:auto;">
+  <div style="padding:20px;max-width:700px;margin:0 auto;width:100%;">
+    <div style="font-size:1.1rem;font-weight:700;color:var(--accent);margin-bottom:16px;">🩺 Schmerztagebuch</div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;">
+      <div style="font-size:.65rem;color:var(--muted);letter-spacing:1px;margin-bottom:10px;">NEUER EINTRAG</div>
+
+      <div style="margin-bottom:10px;">
+        <label style="font-size:.72rem;color:var(--muted);">SCHMERZSTÄRKE (1-10)</label>
+        <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;" id="schmerz-scale">
+          ${Array.from({length:10},(_,i)=>`<button onclick="setSzSkala(${i+1})" id="sz-${i+1}" style="width:38px;height:38px;border-radius:50%;border:2px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;font-weight:700;">${i+1}</button>`).join('')}
+        </div>
+        <div id="sz-skala-val" style="font-size:.72rem;color:var(--muted);margin-top:6px;">Noch nicht gewählt</div>
+      </div>
+
+      <div style="margin-bottom:10px;">
+        <label style="font-size:.72rem;color:var(--muted);">ORT</label>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;" id="schmerz-orte">
+          ${['Kopf','Nacken','Schulter','Arm','Hand','Rücken','Bein','Fuß','Ganzkörper'].map(o=>`<button onclick="toggleSzOrt('${o}',this)" style="background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:6px 12px;cursor:pointer;font-size:.75rem;color:var(--muted);">${o}</button>`).join('')}
+        </div>
+      </div>
+
+      <div style="margin-bottom:10px;">
+        <label style="font-size:.72rem;color:var(--muted);">ART</label>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">
+          ${['Brennend','Stechend','Dumpf','Pochend','Krampfartig','Ziehend'].map(a=>`<button onclick="toggleSzArt('${a}',this)" style="background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:6px 12px;cursor:pointer;font-size:.75rem;color:var(--muted);">${a}</button>`).join('')}
+        </div>
+      </div>
+
+      <div style="margin-bottom:10px;">
+        <label style="font-size:.72rem;color:var(--muted);">NOTIZ</label>
+        <textarea id="sz-notiz" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--text);font-family:inherit;font-size:.82rem;margin-top:6px;resize:vertical;min-height:60px;" placeholder="Was hat geholfen? Medikamente? Besonderheiten..."></textarea>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <label style="font-size:.72rem;color:var(--muted);">STIMMUNG</label>
+        <div style="display:flex;gap:10px;margin-top:6px;">
+          ${[['😢','Schlecht'],['😐','Okay'],['🙂','Gut'],['😄','Super']].map(([e,t])=>`<button onclick="setSzStimmung('${e}',this)" style="background:var(--surface2);border:2px solid var(--border);border-radius:10px;padding:8px 12px;cursor:pointer;text-align:center;">
+            <div style="font-size:1.5rem;">${e}</div>
+            <div style="font-size:.6rem;color:var(--muted);">${t}</div>
+          </button>`).join('')}
+        </div>
+      </div>
+
+      <button onclick="szSpeichern()" style="background:var(--accent);border:none;color:#fff;padding:12px 24px;border-radius:8px;cursor:pointer;font-weight:700;width:100%;">💾 Eintrag speichern</button>
+    </div>
+
+    <div id="sz-verlauf"></div>
+  </div>
+</div>`);
+
+let szSkala = 0, szOrte = [], szArt = [], szStimmung = '';
+let szEintraege = JSON.parse(localStorage.getItem('hf_schmerz') || '[]');
+
+function setSzSkala(v) {
+  szSkala = v;
+  for(let i=1;i<=10;i++){
+    const b = document.getElementById('sz-'+i);
+    if(b) b.style.background = i<=v ? (v<=3?'#10b981':v<=6?'#f59e0b':'#ef4444') : 'var(--surface2)';
+  }
+  setText('sz-skala-val', 'Schmerzstärke: ' + v + '/10');
+}
+
+function toggleSzOrt(o, btn) {
+  if(szOrte.includes(o)) { szOrte=szOrte.filter(x=>x!==o); btn.style.background='var(--surface2)'; btn.style.color='var(--muted)'; }
+  else { szOrte.push(o); btn.style.background='rgba(124,58,237,.2)'; btn.style.color='var(--accent)'; btn.style.borderColor='var(--accent)'; }
+}
+
+function toggleSzArt(a, btn) {
+  if(szArt.includes(a)) { szArt=szArt.filter(x=>x!==a); btn.style.background='var(--surface2)'; btn.style.color='var(--muted)'; }
+  else { szArt.push(a); btn.style.background='rgba(124,58,237,.2)'; btn.style.color='var(--accent)'; btn.style.borderColor='var(--accent)'; }
+}
+
+function setSzStimmung(e, btn) {
+  szStimmung = e;
+  document.querySelectorAll('#p-schmerz button').forEach(b => { if(b.textContent.includes(e)) b.style.borderColor='var(--accent)'; });
+}
+
+function szSpeichern() {
+  if(!szSkala) { alert('Bitte Schmerzstärke wählen!'); return; }
+  const eintrag = {
+    id: Date.now(),
+    datum: new Date().toLocaleString('de-DE'),
+    skala: szSkala,
+    orte: [...szOrte],
+    art: [...szArt],
+    stimmung: szStimmung,
+    notiz: document.getElementById('sz-notiz').value.trim()
+  };
+  szEintraege.unshift(eintrag);
+  localStorage.setItem('hf_schmerz', JSON.stringify(szEintraege));
+  szSkala=0; szOrte=[]; szArt=[]; szStimmung='';
+  document.getElementById('sz-notiz').value='';
+  renderSzVerlauf();
+  status('Schmerzeintrag gespeichert');
+}
+
+function renderSzVerlauf() {
+  const el = document.getElementById('sz-verlauf');
+  if(!el) return;
+  if(!szEintraege.length) { el.innerHTML='<div style="text-align:center;color:var(--muted);padding:30px;">Noch keine Einträge</div>'; return; }
+  el.innerHTML = szEintraege.map((e,i) => `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="font-size:.7rem;color:var(--muted);">${e.datum}</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:1.2rem;">${e.stimmung||''}</span>
+          <span style="background:${e.skala<=3?'#10b981':e.skala<=6?'#f59e0b':'#ef4444'};color:#fff;border-radius:20px;padding:2px 10px;font-weight:700;font-size:.85rem;">${e.skala}/10</span>
+          <button onclick="szLoeschen(${i})" style="background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:.85rem;">✕</button>
+        </div>
+      </div>
+      ${e.orte.length?`<div style="font-size:.72rem;color:var(--muted);">📍 ${e.orte.join(', ')}</div>`:''}
+      ${e.art.length?`<div style="font-size:.72rem;color:var(--muted);margin-top:3px;">⚡ ${e.art.join(', ')}</div>`:''}
+      ${e.notiz?`<div style="font-size:.8rem;margin-top:8px;color:var(--text);">${e.notiz}</div>`:''}
+    </div>`).join('');
+}
+
+function szLoeschen(i) { szEintraege.splice(i,1); localStorage.setItem('hf_schmerz',JSON.stringify(szEintraege)); renderSzVerlauf(); }
+
+// Schmerztagebuch bei Tab Wechsel rendern - direkt in showTab integriert
+</script>
 </body>
 <!-- NEUER SOS-BUTTON & MODAL (ohne Konflikte) -->
 <div id="sos-modal-neu" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:100000; align-items:center; justify-content:center;">
@@ -3718,7 +3898,7 @@ function sosSaveKontaktNeu() {
   </div>
 </div>
 
-<button class="sos-fixed" onclick="openSosModal()" style="position:fixed; bottom:20px; right:20px; width:70px; height:70px; border-radius:50%; background:linear-gradient(135deg,#ef4444,#b91c1c); color:white; border:none; font-size:2rem; font-weight:900; cursor:pointer; z-index:99999; display:flex; align-items:center; justify-content:center; animation:sosPulse 1.5s infinite;">🆘</button>
+<button class="sos-fixed" onclick="openSosModal()" style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%); width:70px; height:70px; border-radius:50%; background:linear-gradient(135deg,#ef4444,#b91c1c); color:white; border:none; font-size:2rem; font-weight:900; cursor:pointer; z-index:99999; display:flex; align-items:center; justify-content:center; animation:sosPulse 1.5s infinite;">🆘</button>
 
 <style>
 @keyframes sosPulse {
